@@ -1,6 +1,9 @@
+// PLUGINS //
 import { Kysely, MysqlDialect } from "kysely";
 import { createPool } from "mysql2";
-import { Database } from "./schema";
+
+// SCHEMA //
+import { Database } from "@/core/database/schema";
 
 const dialect = new MysqlDialect({
   pool: createPool({
