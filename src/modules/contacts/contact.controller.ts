@@ -2,11 +2,11 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 
 // SERVICES //
-import { ContactService } from "@/modules/contact/contact.service";
+import { ContactService } from "@/modules/contacts/contact.service";
 
 // DTO //
-import type { CreateContactDto } from "@/modules/contact/dto/create-contact.dto";
-import type { CreateNewsletterDto } from "@/modules/contact/dto/create-newsletter.dto";
+import type { CreateContactDto } from "@/modules/contacts/dto/create-contact.dto";
+import type { CreateNewsletterDto } from "@/modules/contacts/dto/create-newsletter.dto";
 
 @Controller("contacts")
 export class ContactController {
@@ -34,7 +34,6 @@ export class ContactController {
 
   @Get("awards")
   getContacts() {
-    console.log("AWARDS");
     return this.contactService.getContacts();
   }
 }

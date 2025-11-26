@@ -6,8 +6,8 @@ import { Kysely } from "kysely";
 import { GoogleSheetService, SheetAppendConfig } from "@/common/services/google-sheet.service";
 
 // DTO //
-import { CreateContactDto } from "@/modules/contact/dto/create-contact.dto";
-import { CreateNewsletterDto } from "@/modules/contact/dto/create-newsletter.dto";
+import { CreateContactDto } from "@/modules/contacts/dto/create-contact.dto";
+import { CreateNewsletterDto } from "@/modules/contacts/dto/create-newsletter.dto";
 import { Database } from "@/core/database/schema";
 
 @Injectable()
@@ -18,7 +18,6 @@ export class ContactService {
   ) {}
 
   async getContacts() {
-    console.log(process.env.DB_HOST);
     return this.db.selectFrom("sis_awards").selectAll().execute();
   }
 
