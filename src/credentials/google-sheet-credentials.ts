@@ -1,0 +1,15 @@
+export const credentials = {
+  type: "service_account",
+  project_id: "zizo-407213",
+  private_key_id: "ab6c7d27450d55f3bc615167c504b74938f4c23c",
+  private_key:
+    "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDWdKNYh3qqxg5/\nQ+U90cmjjkYtANPPrDPWbRnGO0RECks5DjBn9+Ln6OX5BKVebggVAZ/2rvhYHfWP\nxnnoMJxAXW7kx1QivvT+XFfcf0NrlfSp1aYljBGDbA5qggp1/riHVgzDMWc7xDIh\n7MK9EJV63kbGpoxmvBGJigPR1vUoh6yuBYhQQmWDJD6BX5d6g4ZnMMvjvJZTLOby\n0oUl8MGRp/QeCecuFtUOdtqa5LQ8fYYbiHVYfe20F5eEzi5QXn6v/Q6o+3rHg5Hh\nR85FUQ4LJNKyuU5WaykxR3npfnCBN0SqJn//TalaZkzgoc7MlTH2iyEMm/AvzHKn\nPyR31ORRAgMBAAECggEAAflK+VUuYijeYGocX5c5JhDouRBwUqGO7NTeW0xneIGY\nf4T/ma5es5QZfUMvXzUPrJtSKMXjneKBNIZ+793WK1K80vzZa7Qymq54hcxTT1e/\nC6rea4ssbFdr0svBe0Rp1/+JEKkZTlPUAwtL/8vZt1q5P6nv4gBuQCQBvN4/zYSd\nVPFMhpRxe5LNDZ7RjuVEiJTgV1XcZjfpax7qF98lYo3zW2FhIjx/IEVctOxprhKd\n7DFCLLwFnMFNILMwK5Ho7VFGhJaAoAQy+gUWby1zR5RMePWd9vlbqVgUZ7B5IMBO\nQ1PQWW+ZsZVfETk8WEaGW7MafDwTPH0RYvOy++LBoQKBgQD9n9czLgYMaSE5sg6X\ny/Vh9Ug2vHoZY80l0GwOB6/XW0NcNVVHTr/oOG6OA7/8kyHxme1TVTDV1kfmsQmt\nQXJyOkbyhTcZP0BvVo1boUEPMbgwBi7W++4cCBqPQafiqfKInTucKnugMxsqfLV7\n91V1bvDLZz6bTrXs7si/GBlWsQKBgQDYduAstPZ6rRUwL6+RHHjmGAZFbuZKgKEw\nPKbwKpe0Tn67eOD4NQP1PL7AtHu0Whr968PGDRXTVsdihc6WAptOOgxxBuzLoJTW\nUe+ZLSS69RWAvnzCEHouoVB2JX09ZjDcWvoKbScTSbJBaWQ3qncXjOXT82Cvpl0N\n5TOa1yEPoQKBgDrTtVWgqjR8ugEo5Kue2jazbuGLTALRnEbWFgoXDFk2SOR9Vl9o\ny6hwVmxIQGK0Od5RJrP6gY5H2nuOusDd+k62Z7he383SVv68I6OKPo3oqWEyPfEN\nlEgaNRbfUrKHWsMHPUlWrUAWOonbTTkIwGCxr9ZuBx583kOrixKP42ixAoGAHF5w\nAMvypZ87cKY/PyhZG+a4I69mFQuIlHbOdhlO6n2DFHTCHyVrkF9WrJC6yacpdG/K\np5EddCYiWWIp8fUDf5wR91ot/H3eI7x3Rz7oWmw2VjogxZo9ORFBJ0rAgCR9cNOn\ng2hMv7Vf3DzAup7nnrmDgWSbHkoSVfjc64UYOyECgYEAwkNVRRhdhzWjBJtIn99c\n7wv+GPmAJtsFP5OlQESDolGMk76dM0Qg9tykkyx69R2FqlqjrOo1F6mML55xixAm\n8t2ZQWJIFBaQp+gqbcYdMsctuKXODMrcHaRbBC52a24sL2Ry0EAUsdggNNAgX/oD\ncRqVnw+Ci1d4WGlzb11dGiI=\n-----END PRIVATE KEY-----\n",
+  client_email: "zizo-780@zizo-407213.iam.gserviceaccount.com",
+  client_id: "111737834494088390678",
+  auth_uri: "https://accounts.google.com/o/oauth2/auth",
+  token_uri: "https://oauth2.googleapis.com/token",
+  auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+  client_x509_cert_url:
+    "https://www.googleapis.com/robot/v1/metadata/x509/zizo-780%40zizo-407213.iam.gserviceaccount.com",
+  universe_domain: "googleapis.com",
+};

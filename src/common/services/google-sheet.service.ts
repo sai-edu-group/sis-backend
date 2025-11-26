@@ -3,7 +3,7 @@ import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { google, sheets_v4 } from "googleapis";
 
 // PROJECT //
-import credentials from "@/credentials/google-sheet-credentials.json";
+import { credentials } from "@/credentials/google-sheet-credentials";
 
 export interface SheetAppendConfig {
   spreadsheetId: string;
@@ -26,9 +26,7 @@ export class GoogleSheetService {
     config: SheetAppendConfig,
   ): Promise<void> {
     if (!config?.spreadsheetId) {
-      throw new InternalServerErrorException(
-        "Spreadsheet id must be provided to append rows",
-      );
+      throw new InternalServerErrorException("Spreadsheet id must be provided to append rows");
     }
 
     // Get the Sheet to make changes
