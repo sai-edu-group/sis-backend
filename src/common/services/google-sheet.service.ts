@@ -23,16 +23,16 @@ export class GoogleSheetService {
    */
   async appendRow(
     values: Array<string | number | null | undefined>,
-    config: SheetAppendConfig
+    config: SheetAppendConfig,
   ): Promise<void> {
     if (!config?.spreadsheetId) {
       throw new InternalServerErrorException(
-        "Spreadsheet id must be provided to append rows"
+        "Spreadsheet id must be provided to append rows",
       );
     }
 
     // Get the Sheet to make changes
-    const sheets = await this.getSheetsClient();
+    const sheets = this.getSheetsClient();
     const sheetName = config.sheetName || "Sheet1";
 
     // Append the new Row into the Sheet
@@ -44,24 +44,22 @@ export class GoogleSheetService {
         values: [values.map((value) => value ?? "")],
       },
     });
-
-
   }
 
   /**
    * Retrieves the authenticated Google Sheets client.
    * Initializes the client if it hasn't been created yet.
    *
-   * @returns A Promise that resolves to the authenticated Sheets client.
+   * @returns The authenticated Sheets client.
    */
-  private async getSheetsClient(): Promise<sheets_v4.Sheets> {
+  private getSheetsClient(): sheets_v4.Sheets {
     if (this.sheetsClient) {
       return this.sheetsClient;
     }
 
     if (!credentials.client_email || !credentials.private_key) {
       throw new InternalServerErrorException(
-        "Google Sheets credentials.json is missing required fields"
+        "Google Sheets credentials.json is missing required fields",
       );
     }
 

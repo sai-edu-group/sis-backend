@@ -1,8 +1,8 @@
 // CORE //
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get } from "@nestjs/common";
 
 // SERVICES //
-import { AppService } from '@/app.service';
+import { AppService } from "@/app.service";
 
 @Controller()
 export class AppController {
@@ -10,7 +10,7 @@ export class AppController {
 
   /**
    * GET: "/"
-   * @returns 
+   * @returns
    */
   @Get()
   getHello(): string {

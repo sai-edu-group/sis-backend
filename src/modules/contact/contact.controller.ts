@@ -1,5 +1,5 @@
 // CORE //
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post } from "@nestjs/common";
 
 // SERVICES //
 import { ContactService } from "@/modules/contact/contact.service";
@@ -14,8 +14,8 @@ export class ContactController {
 
   /**
    * POST: "/contacts"
-   * @param payload 
-   * @returns 
+   * @param payload
+   * @returns
    */
   @Post()
   createContact(@Body() payload: CreateContactDto) {
@@ -24,11 +24,17 @@ export class ContactController {
 
   /**
    * POST: "/contacts/newsletter"
-   * @param payload 
-   * @returns 
+   * @param payload
+   * @returns
    */
   @Post("newsletter")
   subscribeNewsletter(@Body() payload: CreateNewsletterDto) {
     return this.contactService.subscribeNewsletter(payload);
+  }
+
+  @Get("awards")
+  getContacts() {
+    console.log("AWARDS");
+    return this.contactService.getContacts();
   }
 }
