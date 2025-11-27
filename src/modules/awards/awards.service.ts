@@ -6,7 +6,8 @@ import { Kysely } from "kysely";
 import { Database } from "@/core/database/schema";
 
 // ENUMS
-import { LIMITS } from "@/common/enums/limits.enum";
+import { Limits } from "@/common/enums/limits.enum";
+import { Tables } from "@/common/enums/database.enum";
 
 @Injectable()
 export class AwardsService {
@@ -15,7 +16,7 @@ export class AwardsService {
   /** Get the latest awards from the Database */
   async getLatestAwards() {
     return this.db
-      .selectFrom("sis_awards")
+      .selectFrom(Tables.AWARDS)
       .select([
         "id",
         "awardname as awardName",
@@ -24,7 +25,7 @@ export class AwardsService {
       ])
       .where("status", "=", 1)
       .orderBy("entrydate", "desc")
-      .limit(LIMITS.latestAwards)
+      .limit(Limits.LATEST_AWARDS)
       .execute();
   }
 }

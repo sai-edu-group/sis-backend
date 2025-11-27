@@ -1,3 +1,3 @@
-export const enum LIMITS {
-  latestAwards = 6,
+export const enum Limits {
+  LATEST_AWARDS = 6,
 }

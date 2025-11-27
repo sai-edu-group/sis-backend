@@ -1,6 +1,12 @@
 import { Module } from "@nestjs/common";
-import { AwardsController } from "./awards.controller";
-import { AwardsService } from "./awards.service";
+
+// CONTROLLERS //
+import { AwardsController } from "@/modules/awards/awards.controller";
+
+// SERVICES //
+import { AwardsService } from "@/modules/awards/awards.service";
+
+// MODULES //
 import { DatabaseModule } from "@/core/database/database.module";
 
 @Module({
