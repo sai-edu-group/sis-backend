@@ -9,15 +9,11 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ContactModule } from "@/modules/contacts/contact.module";
 import { DatabaseModule } from "@/core/database/database.module";
-import { StudentCouncilModule } from "@/modules/student-council/student-council.module";
+import { AwardsModule } from "./modules/awards/awards.module";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    ContactModule,
-    DatabaseModule,
-    StudentCouncilModule,
-  ],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), ContactModule, DatabaseModule, AwardsModule],
   controllers: [AppController],
   providers: [AppService],
 })
