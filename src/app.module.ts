@@ -12,7 +12,7 @@ import { DatabaseModule } from "@/core/database/database.module";
 import { AwardsModule } from "./modules/awards/awards.module";
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), ContactModule, DatabaseModule, AwardsModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), ContactModule, DatabaseModule, AwardsModule, SioneersModule],
   controllers: [AppController],
   providers: [AppService],
 })
