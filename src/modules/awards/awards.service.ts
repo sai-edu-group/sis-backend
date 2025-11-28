@@ -28,4 +28,24 @@ export class AwardsService {
       .limit(Limits.LATEST_AWARDS)
       .execute();
   }
+
+  async getAwardsByYear(year: number) {
+  const startDate = new Date(`${year}-01-01`);
+  const endDate = new Date(`${year}-12-31`);
+
+  return this.db
+    .selectFrom("sis_awards")
+    .select([
+      "id",
+      "awardname as awardName",
+      "awarddesc as awardDesc",
+      "thumbnailimg as thumbnailImg",
+    ])
+    .where("status", "=", 1)
+    .where("entrydate", ">=", startDate)
+    .where("entrydate", "<=", endDate)
+    .orderBy("entrydate", "desc")
+    .execute();
+  }
+
 }

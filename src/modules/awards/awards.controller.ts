@@ -1,5 +1,5 @@
 // CORE //
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 
 // SERVICES //
 import { AwardsService } from "@/modules/awards/awards.service";
@@ -15,5 +15,10 @@ export class AwardsController {
   @Get("get-latest")
   getLatestAwards() {
     return this.awardsService.getLatestAwards();
+  }
+
+  @Get("get-awards")
+  getAwardsByYear(@Query("year") year: string) {
+    return this.awardsService.getAwardsByYear(Number(year));
   }
 }
