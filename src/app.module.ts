@@ -11,7 +11,6 @@ import { ContactModule } from "@/modules/contacts/contact.module";
 import { DatabaseModule } from "@/core/database/database.module";
 import { StudentCouncilModule } from "@/modules/student-council/student-council.module";
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
