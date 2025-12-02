@@ -1,19 +1,19 @@
 // CORE //
 // MODULES //
-import { DatabaseModule } from '@/core/database/database.module';
+import { DatabaseModule } from "@/core/database/database.module";
 
 // CONTROLLERS //
-import { SioneersController } from './sioneers.controller';
+import { SioneersController } from "./sioneers.controller";
 
 // SERVICES //
-import { SioneersService } from './sioneers.service';
+import { SioneersService } from "./sioneers.service";
 
 // OTHERS //
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 
 @Module({
-     imports: [DatabaseModule],
-    controllers:[SioneersController],
-    providers:[SioneersService],
+  imports: [DatabaseModule],
+  controllers: [SioneersController],
+  providers: [SioneersService],
 })
 export class SioneersModule {}

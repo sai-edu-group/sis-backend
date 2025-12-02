@@ -15,7 +15,13 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), ContactModule, DatabaseModule, AwardsModule, SioneersModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ContactModule,
+    DatabaseModule,
+    AwardsModule,
+    SioneersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
