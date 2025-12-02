@@ -1,15 +1,18 @@
+// MODULES //
+import { ContactModule } from "@/modules/contacts/contact.module";
+import { DatabaseModule } from "@/core/database/database.module";
+import { AwardsModule } from "./modules/awards/awards.module";
+import { SioneersModule } from "@/modules/sioneers/sioneers.module";
+
 // CONTROLLERS //
 import { AppController } from "@/app.controller";
 
 // SERVICES //
 import { AppService } from "@/app.service";
 
-// MODULES //
+// OTHERS //
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { ContactModule } from "@/modules/contacts/contact.module";
-import { DatabaseModule } from "@/core/database/database.module";
-import { AwardsModule } from "./modules/awards/awards.module";
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), ContactModule, DatabaseModule, AwardsModule, SioneersModule],

@@ -1,9 +1,15 @@
 // CORE //
-import { Module } from '@nestjs/common';
-// SERVICES & CONTROLLERS //
-import { SioneersController } from './sioneers.controller';
-import { SioneersService } from './sioneers.service';
+// MODULES //
 import { DatabaseModule } from '@/core/database/database.module';
+
+// CONTROLLERS //
+import { SioneersController } from './sioneers.controller';
+
+// SERVICES //
+import { SioneersService } from './sioneers.service';
+
+// OTHERS //
+import { Module } from '@nestjs/common';
 
 @Module({
      imports: [DatabaseModule],
