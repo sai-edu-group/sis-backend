@@ -12,7 +12,12 @@ import { ConfigModule } from "@nestjs/config";
 import { StudentCouncilModule } from "./modules/student-council/student-council.module";
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), ContactModule, DatabaseModule,StudentCouncilModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ContactModule,
+    DatabaseModule,
+    StudentCouncilModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

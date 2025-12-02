@@ -1,13 +1,17 @@
-// CORE
-import { Module } from '@nestjs/common';
-import { DatabaseModule } from '@/core/database/database.module';   // <- important
+// CORE //
+import { Module } from "@nestjs/common";
 
-// CONTROLLERS & SERVICES //
-import { StudentCouncilController } from './student-council.controller';
-import { StudentCouncilService } from './student-council.service';
+// SERVICES //
+import { StudentCouncilService } from "@/modules/student-council/student-council.service";
+
+// MODULES //
+import { DatabaseModule } from "@/core/database/database.module";
+
+// CONTROLLERS //
+import { StudentCouncilController } from "@/modules/student-council/student-council.controller";
 
 @Module({
-  imports: [DatabaseModule],   
+  imports: [DatabaseModule],
   controllers: [StudentCouncilController],
   providers: [StudentCouncilService],
 })
