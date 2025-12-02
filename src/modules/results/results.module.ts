@@ -1,13 +1,17 @@
-// MODULES //
-import { ResultsService } from '@/modules/results/results.service';
-import { ResultsController } from '@/modules/results/results.controller';
+// CORE //
+import { Module } from "@nestjs/common";
 
-// OTHERS //
-import { Module } from '@nestjs/common';
-import { DatabaseModule } from '@/core/database/database.module';
+// SERVICES //
+import { ResultsService } from "@/modules/results/results.service";
+
+// MODULES //
+import { DatabaseModule } from "@/core/database/database.module";
+
+// CONTROLLERS //
+import { ResultsController } from "@/modules/results/results.controller";
 
 @Module({
-  imports:[DatabaseModule],
+  imports: [DatabaseModule],
   controllers: [ResultsController],
   providers: [ResultsService],
 })

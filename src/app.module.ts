@@ -13,7 +13,13 @@ import { ConfigModule } from "@nestjs/config";
 import { ResultsModule } from "@/modules/results/results.module";
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), ContactModule, DatabaseModule, AwardsModule, ResultsModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ContactModule,
+    DatabaseModule,
+    AwardsModule,
+    ResultsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
