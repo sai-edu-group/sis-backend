@@ -8,6 +8,8 @@ async function bootstrap() {
   // Response Interceptor (to format data)
   app.useGlobalInterceptors(new ResponseInterceptor());
 
+  console.log(process.env.PORT);
+
   await app.listen(process.env.PORT ?? 3000);
 }
 
