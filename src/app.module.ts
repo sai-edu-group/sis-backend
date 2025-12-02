@@ -5,10 +5,9 @@ import { AppController } from "@/app.controller";
 import { AppService } from "@/app.service";
 
 // MODULES //
-import { Module } from "@nestjs/common";
+import { Module, Config } from "@nestjs/common";
 import { ContactModule } from "@/modules/contacts/contact.module";
 import { DatabaseModule } from "@/core/database/database.module";
-import { ConfigModule } from "@nestjs/config";
 import { StudentCouncilModule } from "./modules/student-council/student-council.module";
 
 @Module({
