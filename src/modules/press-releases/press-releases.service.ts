@@ -4,13 +4,20 @@ import { Kysely } from "kysely";
 
 // DATA //
 import { Database } from "@/core/database/schema";
+import { Limits } from "@/common/enums/limits.enum";
+import { Tables } from "@/common/enums/database.enum";
 
 @Injectable()
 export class PressReleasesService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
+  /**
+   * Get paginated press releases filtered by year.
+   * @param year
+   * @param page
+   */
   async getPressReleases(year: number, page: number) {
-    const limit = 10;
+    const limit = Limits.PRESS_RELEASE;
     const offset = (page - 1) * limit;
 
     const startDate = new Date(`${year}-01-01`);
@@ -18,7 +25,7 @@ export class PressReleasesService {
 
     // Total Count
     const totalCountResult = await this.db
-      .selectFrom("web_sis_pressrelease")
+      .selectFrom(Tables.PRESS_RELEASES)
       .select(({ fn }) => fn.count<number>("id").as("count"))
       .where("status", "=", 1)
       .where("pressdate", ">=", startDate)
@@ -29,7 +36,7 @@ export class PressReleasesService {
 
     // Paginated data
     const pressReleases = await this.db
-      .selectFrom("web_sis_pressrelease")
+      .selectFrom(Tables.PRESS_RELEASES)
       .select([
         "id",
         "presstitle as title",

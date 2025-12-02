@@ -32,13 +32,14 @@ export class AwardsController {
    */
   @Get("get-awards")
   getAwardsByYear(@Query("year") year: string) {
-    // --- Validation (Option A: only numeric) ---
+    // --- Validation ---
     if (!year) {
       throw new BadRequestException("Query parameter 'year' is required.");
     }
 
     const numericYear = Number(year);
 
+    // Validation block for checking input year
     if (isNaN(numericYear)) {
       throw new BadRequestException("Year must be a valid number.");
     }

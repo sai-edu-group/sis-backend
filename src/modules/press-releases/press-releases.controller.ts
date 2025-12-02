@@ -2,7 +2,7 @@
 import { PressReleasesService } from "@/modules/press-releases/press-releases.service";
 
 // OTHERS //
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Query, BadRequestException } from "@nestjs/common";
 
 @Controller("press-releases")
 export class PressReleasesController {
@@ -17,6 +17,10 @@ export class PressReleasesController {
     @Query("year") year: string,
     @Query("page") page = "1"
   ) {
+    
+    if (isNaN(Number(year))) {
+      throw new BadRequestException("Invalid year");
+    }
     return this.pressReleasesService.getPressReleases(Number(year), Number(page));
   }
 }
