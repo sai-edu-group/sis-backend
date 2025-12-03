@@ -10,7 +10,7 @@ import { Tables } from "@/common/enums/database.enum";
 export class SioneersService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
-  /**   * Fetch sioneers data for a given academic year
+  /** Fetch sioneers data for a given academic year
    * @param year
    * @throws
    */
@@ -19,6 +19,7 @@ export class SioneersService {
     const start = new Date(year, 0, 1, 0, 0, 0, 0);
     const end = new Date(year, 11, 31, 23, 59, 59, 999);
     // Query to the database where display sioneers within the date range also status is active (1)
+
     try {
       const row = await this.db
         .selectFrom(Tables.GLOBAL_SAIONEERS)
