@@ -15,15 +15,16 @@ export class StudentCouncilController {
    */
   @Get("by-year")
   async getByYear(@Query("year") year?: string) {
+    //  validate year presence
     if (!year) {
       throw new BadRequestException("Year is required");
     }
-
+    //  parse year to integer
     const academicYear = parseInt(year, 10);
     if (isNaN(academicYear)) {
       throw new BadRequestException("Year must be a number");
     }
-
+    // fetch and return data
     return this.service.getByYear(academicYear);
   }
 }
