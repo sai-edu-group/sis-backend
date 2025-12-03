@@ -10,9 +10,11 @@ import { Tables } from "@/common/enums/database.enum";
 export class SioneersService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
-  /** Fetch sioneers data for a given academic year
+  /** 
+   * Fetch sioneers data for a given academic year
+   * 
    * @param year
-   * @throws
+   * @throws InternalServerErrorException
    */
   async getSioneersByYear(year: number) {
     // Define start and end dates for the academic year
