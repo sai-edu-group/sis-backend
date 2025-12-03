@@ -8,7 +8,7 @@ export class StudentCouncilService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
   /**
-   * Fetches the student council entries for a specific academic year.
+   * Fetches the Student Council entries for a specific academic year.
    * @param academicYear - The academic year as a number (e.g. 2024)
    * @returns Array of student council records
    */
