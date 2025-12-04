@@ -1,5 +1,5 @@
 // MODULES //
-import { ResultsService } from "@/modules/results/results.service";
+import { ResultsService } from "./results.service";
 
 // OTHERS //
 import { BadRequestException, Controller, Get, Query } from "@nestjs/common";

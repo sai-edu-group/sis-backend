@@ -3,12 +3,12 @@ import { Inject, Injectable, InternalServerErrorException } from "@nestjs/common
 import { Kysely } from "kysely";
 
 // SERVICES //
-import { GoogleSheetService, SheetAppendConfig } from "@/common/services/google-sheet.service";
+import { GoogleSheetService, SheetAppendConfig } from "../../common/services/google-sheet.service";
 
 // DTO //
-import { CreateContactDto } from "@/modules/contacts/dto/create-contact.dto";
-import { CreateNewsletterDto } from "@/modules/contacts/dto/create-newsletter.dto";
-import { Database } from "@/core/database/schema";
+import { CreateContactDto } from "./dto/create-contact.dto";
+import { CreateNewsletterDto } from "./dto/create-newsletter.dto";
+import { Database } from "../../core/database/schema";
 
 @Injectable()
 export class ContactService {

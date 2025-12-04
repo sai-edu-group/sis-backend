@@ -2,11 +2,11 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 
 // SERVICES //
-import { ContactService } from "@/modules/contacts/contact.service";
+import { ContactService } from "./contact.service";
 
 // DTO //
-import type { CreateContactDto } from "@/modules/contacts/dto/create-contact.dto";
-import type { CreateNewsletterDto } from "@/modules/contacts/dto/create-newsletter.dto";
+import type { CreateContactDto } from "./dto/create-contact.dto";
+import type { CreateNewsletterDto } from "./dto/create-newsletter.dto";
 
 @Controller("contacts")
 export class ContactController {

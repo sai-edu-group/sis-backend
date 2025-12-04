@@ -2,7 +2,7 @@
 import { Controller, Get, Query, BadRequestException } from "@nestjs/common";
 
 // SERVICES //
-import { StudentCouncilService } from "@/modules/student-council/student-council.service";
+import { StudentCouncilService } from "./student-council.service";
 
 @Controller("student-council")
 export class StudentCouncilController {

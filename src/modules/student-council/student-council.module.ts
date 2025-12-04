@@ -8,7 +8,7 @@ import { StudentCouncilService } from "./student-council.service";
 import { DatabaseModule } from "../../core/database/database.module";
 
 // CONTROLLERS //
-import { StudentCouncilController } from "@/modules/student-council/student-council.controller";
+import { StudentCouncilController } from "./student-council.controller";
 
 @Module({
   imports: [DatabaseModule],

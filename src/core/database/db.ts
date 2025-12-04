@@ -3,7 +3,7 @@ import { Kysely, MysqlDialect } from "kysely";
 import { createPool } from "mysql2";
 
 // SCHEMA //
-import { Database } from "@/core/database/schema";
+import { Database } from "./schema";
 
 console.log("DATABASE SE CONNECT HO");
 

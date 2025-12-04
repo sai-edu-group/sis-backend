@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import type { Observable } from "rxjs";
 
 // UTILS //
-import { successResponse } from "@/common/utils/response.util";
+import { successResponse } from "../utils/response.util";
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {

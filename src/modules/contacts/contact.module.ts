@@ -2,14 +2,14 @@
 import { Module } from "@nestjs/common";
 
 // SERVICES //
-import { GoogleSheetService } from "@/common/services/google-sheet.service";
-import { ContactService } from "@/modules/contacts/contact.service";
+import { GoogleSheetService } from "../../common/services/google-sheet.service";
+import { ContactService } from "./contact.service";
 
 // MODULES //
-import { DatabaseModule } from "@/core/database/database.module";
+import { DatabaseModule } from "../../core/database/database.module";
 
 // CONTROLLERS //
-import { ContactController } from "@/modules/contacts/contact.controller";
+import { ContactController } from "./contact.controller";
 
 @Module({
   imports: [DatabaseModule],

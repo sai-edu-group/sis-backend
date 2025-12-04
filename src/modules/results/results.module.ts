@@ -2,13 +2,13 @@
 import { Module } from "@nestjs/common";
 
 // SERVICES //
-import { ResultsService } from "@/modules/results/results.service";
+import { ResultsService } from "./results.service";
 
 // MODULES //
-import { DatabaseModule } from "@/core/database/database.module";
+import { DatabaseModule } from "../../core/database/database.module";
 
 // CONTROLLERS //
-import { ResultsController } from "@/modules/results/results.controller";
+import { ResultsController } from "./results.controller";
 
 @Module({
   imports: [DatabaseModule],

@@ -1,12 +1,12 @@
 // ENUMS //
-import { Tables } from "@/common/enums/database.enum";
+import { Tables } from "../../common/enums/database.enum";
 
 // OTHERS //
 import { Inject, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { Kysely } from "kysely";
 
 // DATA //
-import { Database } from "@/core/database/schema";
+import { Database } from "../../core/database/schema";
 
 @Injectable()
 export class StudentCouncilService {

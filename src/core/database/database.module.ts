@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Kysely, MysqlDialect } from "kysely";
 import { createPool } from "mysql2";
-import { Database } from "@/core/database/schema";
+import { Database } from "../database/schema";
 
 @Module({
   imports: [ConfigModule],
