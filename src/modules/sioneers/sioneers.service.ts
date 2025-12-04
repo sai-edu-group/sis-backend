@@ -17,13 +17,11 @@ export class SioneersService {
    * @throws InternalServerErrorException
    */
   async getSioneersByYear(year: number) {
-
     // Define start and end dates for the academic year
     const start = new Date(year, 0, 1, 0, 0, 0, 0);
     const end = new Date(year, 11, 31, 23, 59, 59, 999);
     // Query to the database where display sioneers within the date range also status is active (1)
 
-    
     try {
       const row = await this.db
         .selectFrom(Tables.GLOBAL_SAIONEERS)
