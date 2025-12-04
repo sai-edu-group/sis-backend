@@ -1,6 +1,6 @@
 // CORE //
 // MODULES //
-import { DatabaseModule } from "@/core/database/database.module";
+import { DatabaseModule } from "../../core/database/database.module";
 
 // CONTROLLERS //
 import { SioneersController } from "./sioneers.controller";
