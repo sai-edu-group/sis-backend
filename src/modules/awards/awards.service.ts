@@ -3,11 +3,11 @@ import { Inject, Injectable } from "@nestjs/common";
 import { Kysely } from "kysely";
 
 // DB Schema //
-import { Database } from "@/core/database/schema";
+import { Database } from "../../core/database/schema";
 
 // ENUMS //
-import { Limits } from "@/common/enums/limits.enum";
-import { Tables } from "@/common/enums/database.enum";
+import { Limits } from "../../common/enums/limits.enum";
+import { Tables } from "../../common/enums/database.enum";
 
 @Injectable()
 export class AwardsService {
@@ -38,26 +38,27 @@ export class AwardsService {
    */
   // Retrieve active awards for a specific year, sorted by newest first
   async getAwardsByYear(year: number) {
-  try {
-    const startDate = new Date(`${year}-01-01`);
-    const endDate = new Date(`${year}-12-31`);
+    try {
+      // Create start and end date boundaries for the given year
+      const startDate = new Date(`${year}-01-01`);
+      const endDate = new Date(`${year}-12-31`);
 
-    return this.db
-      .selectFrom(Tables.AWARDS)
-      .select([
-        "id",
-        "awardname as awardName",
-        "awarddesc as awardDesc",
-        "thumbnailimg as thumbnailImg",
-      ])
-      .where("status", "=", 1)
-      .where("entrydate", ">=", startDate)
-      .where("entrydate", "<=", endDate)
-      .orderBy("entrydate", "desc")
-      .execute();
-  }
-  catch (error) {
-    throw error;
-  }
+      // Query awards matching the year range and active status
+      return this.db
+        .selectFrom(Tables.AWARDS)
+        .select([
+          "id",
+          "awardname as awardName",
+          "awarddesc as awardDesc",
+          "thumbnailimg as thumbnailImg",
+        ])
+        .where("status", "=", 1)
+        .where("entrydate", ">=", startDate)
+        .where("entrydate", "<=", endDate)
+        .orderBy("entrydate", "desc")
+        .execute();
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -1,13 +1,8 @@
 // CORE //
-import {
-  Controller,
-  Get,
-  Query,
-  BadRequestException,
-} from "@nestjs/common";
+import { Controller, Get, Query, BadRequestException } from "@nestjs/common";
 
 // SERVICES //
-import { AwardsService } from "@/modules/awards/awards.service";
+import { AwardsService } from "../../modules/awards/awards.service";
 
 @Controller("awards")
 export class AwardsController {

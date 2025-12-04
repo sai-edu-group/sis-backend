@@ -1,5 +1,5 @@
 // MODULES //
-import { PressReleasesService } from "@/modules/press-releases/press-releases.service";
+import { PressReleasesService } from "../../modules/press-releases/press-releases.service";
 
 // OTHERS //
 import { Controller, Get, Query, BadRequestException } from "@nestjs/common";
@@ -13,10 +13,7 @@ export class PressReleasesController {
    * Paginated Press Releases with year filter
    */
   @Get("get-press-releases")
-  getPressReleases(
-    @Query("year") year: string,
-    @Query("page") page = "1"
-  ) {
+  getPressReleases(@Query("year") year: string, @Query("page") page = "1") {
     // Validate year
     if (isNaN(Number(year))) {
       throw new BadRequestException("Invalid year");
