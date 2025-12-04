@@ -138,4 +138,6 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
+pnpm-lock.yaml
+.vercel
 package-lock.json
