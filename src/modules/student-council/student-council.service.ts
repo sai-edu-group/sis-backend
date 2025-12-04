@@ -14,7 +14,6 @@ export class StudentCouncilService {
    * @returns Array of student council records
    */
   async getByYear(academicYear: number) {
-  
     // Construct date range for given year
     const startOfYear = new Date(academicYear, 0, 1, 0, 0, 0, 0);
     const endOfYear = new Date(academicYear, 11, 31, 23, 59, 59, 999);
@@ -22,7 +21,7 @@ export class StudentCouncilService {
     try {
       // Query student council rows for the given academic year
       const rows = await this.db
-        .selectFrom(Tables.STUDENT_COUNCIL  )
+        .selectFrom(Tables.STUDENT_COUNCIL)
         .select([
           "id",
           "admno as admissionNumber",
