@@ -13,6 +13,7 @@ import { AppService } from "@/app.service";
 // OTHERS //
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { ResultsModule } from "@/modules/results/results.module";
 
 @Module({
   imports: [
