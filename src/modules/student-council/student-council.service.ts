@@ -1,4 +1,3 @@
-// CORE
 // ENUMS //
 import { Tables } from "@/common/enums/database.enum";
 
