@@ -1,14 +1,17 @@
+// MODULES //
+import { ContactModule } from "@/modules/contacts/contact.module";
+import { DatabaseModule } from "@/core/database/database.module";
+import { AwardsModule } from "./modules/awards/awards.module";
+import { SioneersModule } from "@/modules/sioneers/sioneers.module";
+
 // CONTROLLERS //
 import { AppController } from "@/app.controller";
 
 // SERVICES //
 import { AppService } from "@/app.service";
 
-// MODULES //
+// OTHERS //
 import { Module } from "@nestjs/common";
-import { ContactModule } from "@/modules/contacts/contact.module";
-import { DatabaseModule } from "@/core/database/database.module";
-import { AwardsModule } from "./modules/awards/awards.module";
 import { ConfigModule } from "@nestjs/config";
 import { ResultsModule } from "@/modules/results/results.module";
 
@@ -18,7 +21,7 @@ import { ResultsModule } from "@/modules/results/results.module";
     ContactModule,
     DatabaseModule,
     AwardsModule,
-    ResultsModule,
+    SioneersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
