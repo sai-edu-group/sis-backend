@@ -1,4 +1,4 @@
-// CORE
+// CORE //
 import {
   Controller,
   Get,
@@ -6,7 +6,7 @@ import {
   BadRequestException,
 } from "@nestjs/common";
 
-// SERVICES
+// SERVICES //
 import { AwardsService } from "@/modules/awards/awards.service";
 
 @Controller("awards")
@@ -37,6 +37,7 @@ export class AwardsController {
       throw new BadRequestException("Query parameter 'year' is required.");
     }
 
+    // Convert the 'year' query parameter from a string to a number
     const numericYear = Number(year);
 
     // Validation block for checking input year

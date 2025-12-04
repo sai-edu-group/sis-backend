@@ -1,11 +1,13 @@
+// ENUMS //
+import { Limits } from "@/common/enums/limits.enum";
+import { Tables } from "@/common/enums/database.enum";
+
 // OTHERS //
 import { Inject, Injectable } from "@nestjs/common";
 import { Kysely } from "kysely";
 
 // DATA //
 import { Database } from "@/core/database/schema";
-import { Limits } from "@/common/enums/limits.enum";
-import { Tables } from "@/common/enums/database.enum";
 
 @Injectable()
 export class PressReleasesService {
@@ -17,12 +19,13 @@ export class PressReleasesService {
    * @param page
    */
   async getPressReleases(year: number, page: number) {
-    const limit = Limits.PRESS_RELEASE;
-    const offset = (page - 1) * limit;
+  const limit = Limits.PRESS_RELEASE;
+  const offset = (page - 1) * limit;
 
-    const startDate = new Date(`${year}-01-01`);
-    const endDate = new Date(`${year}-12-31`);
+  const startDate = new Date(`${year}-01-01`);
+  const endDate = new Date(`${year}-12-31`);
 
+  try {
     // Total Count
     const totalCountResult = await this.db
       .selectFrom(Tables.PRESS_RELEASES)
@@ -57,5 +60,9 @@ export class PressReleasesService {
       totalCount,
       pressReleases,
     };
+  } catch (error) {
+    throw error;
   }
+}
+
 }

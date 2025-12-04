@@ -17,9 +17,14 @@ export class PressReleasesController {
     @Query("year") year: string,
     @Query("page") page = "1"
   ) {
-    
+    // Validate year
     if (isNaN(Number(year))) {
       throw new BadRequestException("Invalid year");
+    }
+    // Validate page
+    const numericPage = Number(page);
+    if (isNaN(numericPage) || numericPage < 1 || !Number.isInteger(numericPage)) {
+      throw new BadRequestException("Invalid page number");
     }
     return this.pressReleasesService.getPressReleases(Number(year), Number(page));
   }

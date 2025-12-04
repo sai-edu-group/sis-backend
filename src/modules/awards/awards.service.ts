@@ -1,11 +1,11 @@
-// CORE
+// CORE //
 import { Inject, Injectable } from "@nestjs/common";
 import { Kysely } from "kysely";
 
-// DB Schema
+// DB Schema //
 import { Database } from "@/core/database/schema";
 
-// ENUMS
+// ENUMS //
 import { Limits } from "@/common/enums/limits.enum";
 import { Tables } from "@/common/enums/database.enum";
 
@@ -36,7 +36,9 @@ export class AwardsService {
    *
    * @param year - The year to filter awards by.
    */
+  // Retrieve active awards for a specific year, sorted by newest first
   async getAwardsByYear(year: number) {
+  try {
     const startDate = new Date(`${year}-01-01`);
     const endDate = new Date(`${year}-12-31`);
 
@@ -53,5 +55,9 @@ export class AwardsService {
       .where("entrydate", "<=", endDate)
       .orderBy("entrydate", "desc")
       .execute();
+  }
+  catch (error) {
+    throw error;
+  }
   }
 }
