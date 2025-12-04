@@ -10,9 +10,9 @@ import { Tables } from "@/common/enums/database.enum";
 export class SioneersService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
-  /** 
+  /**
    * Fetch sioneers data for a given academic year
-   * 
+   *
    * @param year
    * @throws InternalServerErrorException
    */

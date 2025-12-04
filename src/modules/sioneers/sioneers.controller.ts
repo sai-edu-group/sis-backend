@@ -1,5 +1,5 @@
 // MODULES //
-import { SioneersService } from "@/modules/sioneers/sioneers.service";
+import { SioneersService } from "./sioneers.service";
 
 // OTHERS //
 import { BadRequestException, Controller, Get, Query } from "@nestjs/common";
@@ -9,17 +9,18 @@ export class SioneersController {
   constructor(private readonly sioneersService: SioneersService) {}
 
   /**
-   * Returns sioneers (students) for a given academic year.
+   * Fetches sioneers (students) for a given academic year.
    *
-   * @param year
-   * @returns
+   * @param year - Academic year as a number (e.g., 2024)
+   * @returns List of sioneers for that year
    */
   @Get("get-sioneers")
   async getSioneers(@Query("year") year: string) {
-    // Validate year query parameter
+    // validate year query parameter
     if (!year) {
       throw new BadRequestException("Year query parameter is required");
     }
+
     // Parse year to integer
     const academicYear = parseInt(year, 10);
 
@@ -28,6 +29,7 @@ export class SioneersController {
       throw new BadRequestException("Year must be a valid number");
     }
 
+    // Fetch and return sioneers data for the specified year
     return this.sioneersService.getSioneersByYear(academicYear);
   }
 }
