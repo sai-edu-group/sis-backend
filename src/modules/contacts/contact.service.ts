@@ -27,7 +27,7 @@ export class ContactService {
     const sheetConfig = this.resolveSheetConfig(
       "GOOGLE_SHEETS_SPREADSHEET_ID",
       "GOOGLE_SHEETS_SHEET_NAME",
-      "Contact",
+      "Sheet1",
     );
 
     // Add the Row to the Google Sheet - using the Google Sheet Service
@@ -52,7 +52,7 @@ export class ContactService {
     const sheetConfig = this.resolveSheetConfig(
       "GOOGLE_SHEETS_NEWSLETTER_SPREADSHEET_ID",
       "GOOGLE_SHEETS_NEWSLETTER_SHEET_NAME",
-      "Newsletter",
+      "Sheet1",
     );
 
     // Append the row to the Google Sheet - using the Google Sheet Service

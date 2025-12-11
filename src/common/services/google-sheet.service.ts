@@ -2,9 +2,6 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { google, sheets_v4 } from "googleapis";
 
-// PROJECT //
-import { credentials } from "../../credentials/google-sheet-credentials";
-
 export interface SheetAppendConfig {
   spreadsheetId: string;
   sheetName?: string;
@@ -55,7 +52,7 @@ export class GoogleSheetService {
       return this.sheetsClient;
     }
 
-    if (!credentials.client_email || !credentials.private_key) {
+    if (!process.env.client_email || !process.env.private_key) {
       throw new InternalServerErrorException(
         "Google Sheets credentials.json is missing required fields",
       );
@@ -63,8 +60,8 @@ export class GoogleSheetService {
 
     // Connect (Authenticate) to the Google Sheet API
     const auth = new google.auth.JWT({
-      email: credentials.client_email,
-      key: credentials.private_key,
+      email: process.env.client_email,
+      key: process.env.private_key,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
 

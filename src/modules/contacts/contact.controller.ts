@@ -29,6 +29,7 @@ export class ContactController {
    */
   @Post("newsletter")
   subscribeNewsletter(@Body() payload: CreateNewsletterDto) {
+    console.log(payload.email);
     return this.contactService.subscribeNewsletter(payload);
   }
 
