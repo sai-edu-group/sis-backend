@@ -8,6 +8,13 @@ async function bootstrap() {
   // Response Interceptor (to format data)
   app.useGlobalInterceptors(new ResponseInterceptor());
 
+  // Enable CORS
+  app.enableCors({
+    origin: ["https://uat.saicloudschool.in", "http://localhost:3000", "http://localhost:5173"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    credentials: true,
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 
