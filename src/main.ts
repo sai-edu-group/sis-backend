@@ -10,7 +10,7 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: ["https://uat.saicloudschool.in", "http://localhost:3000", "http://localhost:5173"],
+    origin: ["*"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     credentials: true,
   });
