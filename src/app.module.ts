@@ -1,6 +1,7 @@
 // MODULES //
 import { ContactModule } from "./modules/contacts/contact.module";
 import { DatabaseModule } from "./core/database/database.module";
+import { AlbumsModule } from "./modules/albums/albums.module";
 import { AwardsModule } from "./modules/awards/awards.module";
 import { PressReleasesModule } from "./modules/press-releases/press-releases.module";
 import { SioneersModule } from "./modules/sioneers/sioneers.module";
@@ -21,6 +22,7 @@ import { ConfigModule } from "@nestjs/config";
     ConfigModule.forRoot({ isGlobal: true }),
     ContactModule,
     DatabaseModule,
+    AlbumsModule,
     AwardsModule,
     PressReleasesModule,
     SioneersModule,

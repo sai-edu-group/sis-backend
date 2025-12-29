@@ -7,4 +7,5 @@ export enum Tables {
   PRESS_RELEASES = "web_sis_pressrelease",
   STUDENT_COUNCIL = "web_sis_scouncil",
   GLOBAL_SAIONEERS = "web_global_saioneers",
+  GALLERY = "sis_web_gallery",
 }
