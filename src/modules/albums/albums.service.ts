@@ -1,38 +1,50 @@
+// CORE //
+import { Inject, Injectable } from "@nestjs/common";
+import { Kysely } from "kysely";
+
+// DB Schema //
+import { Database } from "../../core/database/schema";
+
 // ENUMS //
 import { Tables } from "../../common/enums/database.enum";
 
-// OTHERS //
-import { Inject, Injectable, BadRequestException } from "@nestjs/common";
-import { Kysely } from "kysely";
-
-// DATA //
-import { Database } from "../../core/database/schema";
-
 @Injectable()
 export class AlbumsService {
+  // Service to handle album-related business logic
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
+  // Inject Kysely database instance for query building
 
-  async getAlbumPhotos(albumId: number) {
+  /**
+   * Get albums by year. (Fetch albums filtered by created_on year)
+   *
+   * @param year - The year to filter albums by.
+   */
+  async getAlbumsByYear(year: number) {
     try {
-      const album = await this.db
-        .selectFrom("sis_web_gallery")
+      const startDate = new Date(`${year}-01-01T00:00:00`);
+      const endDate = new Date(`${year}-12-31T23:59:59`);
+
+      // Query albums matching the year range
+      const albums = await this.db
+        .selectFrom(Tables.GALLERY)
+        // Select from sis_web_gallery table
         .select([
           "gallery_id as id",
           "gallery_title as title",
           "gallery_sub_title as sub_title",
           "gallery_thumbnail as thumbnail",
-          "gallery_photo_path as photo_path",
-          "gallery_photo",
         ])
-        .where("gallery_id", "=", albumId)
-        .executeTakeFirst();
-
-      if (!album) {
-        throw new BadRequestException("Album not found");
-      }
-
-      return album;
+        .where("created_on", ">=", startDate)
+        .where("created_on", "<=", endDate)
+        // Sort by creation date in descending order (newest first)
+        .orderBy("created_on", "desc")
+        // Execute the Kysely query
+        .execute();
+      
+      return albums;
+      // Return the filtered album records
     } catch (error) {
+      // Catch any database errors
       throw error;
     }
   }
