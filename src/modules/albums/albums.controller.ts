@@ -25,17 +25,16 @@ export class AlbumsController {
     if (!year) {
       throw new BadRequestException("Query parameter 'year' is required.");
     }
+    
     // Validate that year query parameter is provided
-
     const numericYear = Number(year);
 
     // Validation block for checking input year
     if (isNaN(numericYear)) {
       throw new BadRequestException("Year must be a valid number.");
     }
-    // Validate that year is a valid number
 
-    return this.albumsService.getAlbumsByYear(numericYear);
     // Call service method to fetch albums for the given year
+    return this.albumsService.getAlbumsByYear(numericYear);
   }
 }
