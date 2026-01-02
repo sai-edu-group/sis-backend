@@ -82,6 +82,19 @@ export interface WebGlobalSaioneersTable {
   updatedate: Date;
 }
 
+export interface SisWebGalleryTable {
+  gallery_id: number;
+  gallery_title: string;
+  gallery_sub_title: string;
+  gallery_thumbnail: string;
+  gallery_year: number;
+  gallery_photo_path: string;
+  gallery_photo: string;
+  gallery_status: number;
+  created_by: number;
+  created_on: Date;
+}
+
 // Export all the Tables
 export interface Database {
   master_school: MasterSchoolTable;
@@ -91,4 +104,5 @@ export interface Database {
   web_sis_pressrelease: WebSisPressreleaseTable;
   web_sis_scouncil: WebSisScouncilTable;
   web_global_saioneers: WebGlobalSaioneersTable;
+  sis_web_gallery: SisWebGalleryTable;
 }
