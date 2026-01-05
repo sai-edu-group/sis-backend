@@ -73,8 +73,8 @@ export class AlbumsService {
         throw new BadRequestException("Album not found");
       }
 
-      return album;
       // Return the album with its photos
+      return album;
     } catch (error) {
       // Catch any database errors
       throw error;
