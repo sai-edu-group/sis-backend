@@ -1,5 +1,5 @@
 // CORE //
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, BadRequestException } from "@nestjs/common";
 import { Kysely } from "kysely";
 
 // DB Schema //
@@ -43,6 +43,38 @@ export class AlbumsService {
       
       return albums;
       // Return the filtered album records
+    } catch (error) {
+      // Catch any database errors
+      throw error;
+    }
+  }
+
+  /**
+   * Get album photos by album ID.
+   *
+   * @param albumId - The ID of the album to fetch photos from.
+   */
+  async getAlbumPhotos(albumId: number) {
+    try {
+      const album = await this.db
+        .selectFrom(Tables.GALLERY)
+        .select([
+          "gallery_id as id",
+          "gallery_title as title",
+          "gallery_sub_title as sub_title",
+          "gallery_thumbnail as thumbnail",
+          "gallery_photo_path as photo_path",
+          "gallery_photo",
+        ])
+        .where("gallery_id", "=", albumId)
+        .executeTakeFirst();
+
+      if (!album) {
+        throw new BadRequestException("Album not found");
+      }
+
+      // Return the album with its photos
+      return album;
     } catch (error) {
       // Catch any database errors
       throw error;
