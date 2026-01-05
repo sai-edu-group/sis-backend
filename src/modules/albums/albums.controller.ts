@@ -37,16 +37,20 @@ export class AlbumsController {
     // Call service method to fetch albums for the given year
     return this.albumsService.getAlbumsByYear(numericYear);
   }
-  /**
-   * GET: /albums/album-photos?album_id=3
-   * Get album photos by album id
+  
+   /** 
+    * GET: /albums/album-photos?album_id=3
+    *
+    * Get album photos by album id
    */
   @Get("album-photos")
   getAlbumPhotos(@Query("album_id") albumId: string) {
+    // If the Album ID is not sent - return error
     if (isNaN(Number(albumId))) {
       throw new BadRequestException("Invalid album_id");
     }
 
+    // Call the service function to get the Photos
     return this.albumsService.getAlbumPhotos(Number(albumId));
   }
 }
