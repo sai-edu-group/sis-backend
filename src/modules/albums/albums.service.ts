@@ -33,6 +33,7 @@ export class AlbumsService {
           "gallery_title as title",
           "gallery_sub_title as sub_title",
           "gallery_thumbnail as thumbnail",
+          "gallery_photo_path as photo_path",
         ])
         .where("created_on", ">=", startDate)
         .where("created_on", "<=", endDate)
