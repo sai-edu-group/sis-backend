@@ -51,6 +51,6 @@ export class AlbumsController {
     }
 
     // Call the service function to get the Photos
-    return this.albumsService.getAlbumPhotos(Number(albumId));
+   return this.albumsService.getAlbumPhotos(Number(albumId));
   }
 }
