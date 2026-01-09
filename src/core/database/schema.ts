@@ -95,6 +95,28 @@ export interface SisWebGalleryTable {
   created_on: Date;
 }
 
+export interface SisBlogTable {
+  blog_id: number;
+  blog_title: string;
+  blog_details: string;
+  blog_thumbnail: string;
+  blog_banner: string;
+  blog_category: number;
+  blog_photo_path: string;
+  blog_photo: string;
+  blog_status: number;
+  created_by: number;
+  created_on: Date;
+}
+
+export interface SisBlogCategoryTable {
+  category_id: number;
+  category_title: string;
+  category_status: number;
+  category_icon_path: string;
+  created_on: Date;
+}
+
 // Export all the Tables
 export interface Database {
   master_school: MasterSchoolTable;
@@ -105,4 +127,6 @@ export interface Database {
   web_sis_scouncil: WebSisScouncilTable;
   web_global_saioneers: WebGlobalSaioneersTable;
   sis_web_gallery: SisWebGalleryTable;
+  sis_blog: SisBlogTable;
+  blog_category: SisBlogCategoryTable;
 }

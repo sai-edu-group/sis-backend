@@ -6,6 +6,7 @@ import { AwardsModule } from "./modules/awards/awards.module";
 import { PressReleasesModule } from "./modules/press-releases/press-releases.module";
 import { SioneersModule } from "./modules/sioneers/sioneers.module";
 import { ResultsModule } from "./modules/results/results.module";
+import { BlogsModule } from "./modules/blogs/blogs.module";
 
 // CONTROLLERS //
 import { AppController } from "./app.controller";
@@ -27,6 +28,7 @@ import { ConfigModule } from "@nestjs/config";
     PressReleasesModule,
     SioneersModule,
     ResultsModule,
+    BlogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
