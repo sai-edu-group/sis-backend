@@ -95,7 +95,7 @@ export interface SisWebGalleryTable {
   created_on: Date;
 }
 
-export interface SisBlogTable {
+export interface SisBlogsTable {
   blog_id: number;
   blog_title: string;
   blog_details: string;
@@ -127,6 +127,6 @@ export interface Database {
   web_sis_scouncil: WebSisScouncilTable;
   web_global_saioneers: WebGlobalSaioneersTable;
   sis_web_gallery: SisWebGalleryTable;
-  sis_blog: SisBlogTable;
+  sis_blog: SisBlogsTable;
   blog_category: SisBlogCategoryTable;
 }

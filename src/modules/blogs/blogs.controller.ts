@@ -1,5 +1,5 @@
 // CORE //
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get,Query } from "@nestjs/common";
 
 // SERVICES //
 import { BlogsService } from "./blogs.service";
@@ -22,5 +22,32 @@ export class BlogsController {
   getLatestBlogs() {
     // Fetch the 10 latest blogs with category information
     return this.blogsService.getLatestBlogs();
+  }
+    /**
+   * GET: /blogs/by-year
+   *
+   * Fetch blogs by year with pagination.
+   */
+  @Get("by-year")
+  getBlogsByYear(
+    @Query("year") year: number,
+    @Query("page") page = 1,
+    @Query("limit") limit = 10
+  ) {
+    return this.blogsService.getBlogsByYear(
+      Number(year),
+      Number(page),
+      Number(limit)
+    );
+  }
+
+  /**
+   * GET: /blogs/by-id
+   *
+   * Fetch blog details by blog ID.
+   */
+  @Get("by-id")
+  getBlogById(@Query("id") id: number) {
+    return this.blogsService.getBlogById(Number(id));
   }
 }
