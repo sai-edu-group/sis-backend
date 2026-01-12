@@ -27,17 +27,11 @@ export class BlogsService {
     try {
       // Query the 10 latest blogs with category information
       const blogs = await this.db
-        .selectFrom(Tables.BLOGS)
-        // Select from sis_blog table
+        .selectFrom(BLOG_TABLE)
         .innerJoin(
-          Tables.BLOG_CATEGORY,
-          // INNER JOIN with blog_category table
-          (join) =>
-            join.onRef(
-              "sis_blog.blog_category",
-              "=",
-              "blog_category.category_id"
-            )
+          BLOG_CATEGORY_TABLE,
+          "sis_blog.blog_category",
+          "blog_category.category_id"
         )
         .select([
           "sis_blog.blog_id as id",
@@ -50,6 +44,8 @@ export class BlogsService {
           "sis_blog.created_on",
           "blog_category.category_title as category_name",
         ])
+        // Only Active Blogs
+        .where("sis_blog.blog_status", "=", 1)
         // Sort by creation date in descending order (newest first)
         .orderBy("sis_blog.created_on", "desc")
         // Limit to 10 latest blogs
@@ -75,9 +71,11 @@ async getBlogsByYear(year: number, page: number, limit: number) {
   try {
     const offset = (page - 1) * limit;
 
+    // Construct the Dates
     const startDate = new Date(year, 0, 1, 0, 0, 0, 0);
     const endDate = new Date(year, 11, 31, 23, 59, 59, 999);
 
+    // Build the Query
     const blogs = await this.db
       .selectFrom(BLOG_TABLE)
       .innerJoin(
@@ -104,6 +102,7 @@ async getBlogsByYear(year: number, page: number, limit: number) {
       .offset(offset)
       .execute();
 
+    // Get Total Count
     const countResult = await this.db
       .selectFrom(BLOG_TABLE)
       .select(({ fn }) => fn.count<number>("blog_id").as("count"))
@@ -131,6 +130,7 @@ async getBlogsByYear(year: number, page: number, limit: number) {
    */
 async getBlogById(id: number) {
   try {
+    // Build the Query and Execute
     return await this.db
       .selectFrom(BLOG_TABLE)
       .innerJoin(
