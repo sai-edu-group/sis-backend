@@ -2,7 +2,7 @@
 import { PressReleasesService } from "../../modules/press-releases/press-releases.service";
 
 // OTHERS //
-import { Controller, Get, Query, BadRequestException } from "@nestjs/common";
+import { Controller, Get, BadRequestException } from "@nestjs/common";
 
 @Controller("press-releases")
 export class PressReleasesController {
