@@ -10,9 +10,19 @@ import type { INestApplication } from "@nestjs/common";
 let cachedApp: INestApplication | null = null;
 
 async function bootstrap(): Promise<INestApplication> {
+  // const server = express();
+
   if (!cachedApp) {
+    //  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
     const app = await NestFactory.create(AppModule);
     app.useGlobalInterceptors(new ResponseInterceptor());
+
+    app.enableCors({
+      origin: "*",
+      methods: ["GET", "POST", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    });
+
     await app.init(); // IMPORTANT: no app.listen()
 
     cachedApp = app;
