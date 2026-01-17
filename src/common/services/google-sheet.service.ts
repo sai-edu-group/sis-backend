@@ -58,10 +58,12 @@ export class GoogleSheetService {
       );
     }
 
+    const privateKey = process.env.private_key!.replace(/\\n/g, "\n");
+
     // Connect (Authenticate) to the Google Sheet API
     const auth = new google.auth.JWT({
       email: process.env.client_email,
-      key: process.env.private_key,
+      key: privateKey,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
 
