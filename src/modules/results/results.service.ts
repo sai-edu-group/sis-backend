@@ -46,7 +46,7 @@ export class ResultsService {
         .where("r.class_name", "=", classId)
         .where("r.entrydate", ">=", start)
         .where("r.entrydate", "<=", end)
-        .orderBy("r.entrydate", "desc")
+        .orderBy("r.percentage", "desc")
         .execute();
 
       return rows;
