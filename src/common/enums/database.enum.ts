@@ -11,4 +11,5 @@ export enum Tables {
   BLOGS = "sis_blog",
   BLOG_CATEGORY = "blog_category",
   YEAR = "sis_web_year",
+  SESSION = "master_session",
 }

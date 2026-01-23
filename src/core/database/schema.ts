@@ -126,6 +126,16 @@ export interface SisWebYearTable {
   created_by: number | null;
   created_on: Date;
 }
+export interface MasterSessionTable {
+  id: number;
+  session_name: string | null;
+  session_startdate: Date | null;
+  session_enddate: Date | null;
+  schoolid: string | null;
+  status: number | null;
+  entrydate: Date | null;
+  updatedate: Date | null;
+}
 
 // Export all the Tables
 export interface Database {
@@ -143,13 +153,4 @@ export interface Database {
   master_session: MasterSessionTable;
 }
 
-export interface MasterSessionTable {
-  id: number;
-  session_name: string | null;
-  session_startdate: Date | null;
-  session_enddate: Date | null;
-  schoolid: string | null;
-  status: number | null;
-  entrydate: Date | null;
-  updatedate: Date | null;
-}
+

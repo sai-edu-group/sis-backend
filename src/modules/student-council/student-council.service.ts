@@ -3,7 +3,7 @@ import { Tables } from "../../common/enums/database.enum";
 
 // OTHERS //
 import { Inject, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { Kysely } from "kysely";
+import { Kysely, sql } from "kysely";
 
 // DATA //
 import { Database } from "../../core/database/schema";
@@ -18,26 +18,28 @@ export class StudentCouncilService {
    * @returns Array of student council records
    */
   async getByYear(academicYear: number) {
-    // Construct date range for given year
-    const startOfYear = new Date(academicYear, 0, 1, 0, 0, 0, 0);
-    const endOfYear = new Date(academicYear, 11, 31, 23, 59, 59, 999);
-
     try {
       // Query student council rows for the given academic year
       const rows = await this.db
-        .selectFrom(Tables.STUDENT_COUNCIL)
+        .selectFrom(`${Tables.STUDENT_COUNCIL} as sc`)
+        .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+          join.on(
+            sql`CAST(sc.session_name AS CHAR)`,
+            "=",
+            sql`CAST(ms.id AS CHAR)`
+          )
+        )
         .select([
-          "id",
-          "admno as admissionNumber",
-          "studname as studentName",
-          "designation",
-          "class_name as className",
-          "studprofilepic as studentProfilePic",
+          "sc.id",
+          "sc.admno as admissionNumber",
+          "sc.studname as studentName",
+          "sc.designation",
+          "sc.class_name as className",
+          "sc.studprofilepic as studentProfilePic",
         ])
-        .where("status", "=", 1)
-        .where("entrydate", ">=", startOfYear)
-        .where("entrydate", "<=", endOfYear)
-        .orderBy("sorting")
+        .where("sc.status", "=", 1)
+        .where(sql<boolean>`YEAR(ms.session_enddate) = ${academicYear}`)
+        .orderBy("sc.sorting")
         .execute();
 
       return rows;

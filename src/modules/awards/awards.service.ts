@@ -57,8 +57,8 @@ export class AwardsService {
           "sa.thumbnailimg as thumbnailImg",
         ])
         .where("sa.status", "=", 1)
-        // match first 4 chars of master_session.session_name (start year) with requested year
-        .where(sql<boolean>`SUBSTRING(ms.session_name, 1, 4) = ${year}`)
+        // match year of master_session.session_enddate with requested year
+        .where(sql<boolean>`YEAR(ms.session_enddate) = ${year}`)
         .orderBy("sa.entrydate", "desc")
         .execute();
     } catch (error) {
