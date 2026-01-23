@@ -39,23 +39,27 @@ export class AwardsService {
   // Retrieve active awards for a specific year using sis_web_year, sorted by newest first
   async getAwardsByYear(year: string) {
     try {
-      // Query awards matching the year and active status by mapping
+      // Query awards matching the year and active status by joining with master_session
       return this.db
-        .selectFrom(Tables.AWARDS)
-        // @ts-ignore
-        .innerJoin("master_session", "sis_awards.session_name", "master_session.id")
-        // @ts-ignore - join with non-schema table; runtime SQL is valid
+        .selectFrom(`${Tables.AWARDS} as sa`)
+        // using sql cast for join to handle potential type mismatch (string session_name vs int id)
+        .innerJoin("master_session as ms", (join) =>
+          join.on(
+            sql`CAST(sa.session_name AS CHAR)`,
+            "=",
+            sql`CAST(ms.id AS CHAR)`
+          )
+        )
         .select([
-          "id",
-          "awardname as awardName",
-          "awarddesc as awardDesc",
-          "thumbnailimg as thumbnailImg",
+          "sa.id",
+          "sa.awardname as awardName",
+          "sa.awarddesc as awardDesc",
+          "sa.thumbnailimg as thumbnailImg",
         ])
-        .where("status", "=", 1)
+        .where("sa.status", "=", 1)
         // match first 4 chars of master_session.session_name (start year) with requested year
-        // @ts-ignore
-        .where(sql`SUBSTRING(master_session.session_name, 1, 4) = ${year}`)
-        .orderBy("entrydate", "desc")
+        .where(sql<boolean>`SUBSTRING(ms.session_name, 1, 4) = ${year}`)
+        .orderBy("sa.entrydate", "desc")
         .execute();
     } catch (error) {
       throw error;

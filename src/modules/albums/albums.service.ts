@@ -19,23 +19,23 @@ export class AlbumsService {
    *
    * @param year - The year to filter albums by.
    */
-  async getAlbumsByYear(year: number) {
+    async getAlbumsByYear(year: string) {
     try {
       // Query albums matching the year range
+      // The gallery_year column refers to sis_web_year (e.g. id=1 -> "2025")
       const albums = await this.db
-        .selectFrom(Tables.GALLERY)
-        // Select from sis_web_gallery table
-        .innerJoin(Tables.YEAR, "gallery_year", "year_id")
+        .selectFrom(`${Tables.GALLERY} as sg`)
+        .innerJoin(`${Tables.YEAR} as sy`, "sg.gallery_year", "sy.year_id")
         .select([
-          "gallery_id as id",
-          "gallery_title as title",
-          "gallery_sub_title as sub_title",
-          "gallery_thumbnail as thumbnail",
-          "gallery_photo_path as photo_path",
+          "sg.gallery_id as id",
+          "sg.gallery_title as title",
+          "sg.gallery_sub_title as sub_title",
+          "sg.gallery_thumbnail as thumbnail",
+          "sg.gallery_photo_path as photo_path",
         ])
-        .where(sql`sis_web_year.year_title`, "=", year.toString())
+        .where("sy.year_title", "=", year)
         // Sort by creation date in descending order (newest first)
-        .orderBy("sis_web_gallery.created_on", "desc")
+        .orderBy("sg.created_on", "desc")
         // Execute the Kysely query
         .execute();
       

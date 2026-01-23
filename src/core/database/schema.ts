@@ -141,4 +141,16 @@ export interface Database {
   sis_blog: SisBlogsTable;
   blog_category: SisBlogCategoryTable;
   sis_web_year: SisWebYearTable;
+  master_session: MasterSessionTable;
+}
+
+export interface MasterSessionTable {
+  id: number;
+  session_name: string | null;
+  session_startdate: Date | null;
+  session_enddate: Date | null;
+  schoolid: string | null;
+  status: number | null;
+  entrydate: Date | null;
+  updatedate: Date | null;
 }

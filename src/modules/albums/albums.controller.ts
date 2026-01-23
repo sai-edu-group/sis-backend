@@ -35,7 +35,7 @@ export class AlbumsController {
     }
 
     // Call service method to fetch albums for the given year
-    return this.albumsService.getAlbumsByYear(numericYear);
+    return this.albumsService.getAlbumsByYear(year);
   }
   
    /** 
