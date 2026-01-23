@@ -74,7 +74,6 @@ export interface WebGlobalSaioneersTable {
   session_name: string;
   admno: string;
   univname: string;
-  class_name: string;
   studprofilepic: string | null;
   countryname: string;
   status: number;
@@ -117,6 +116,27 @@ export interface SisBlogCategoryTable {
   created_on: Date;
 }
 
+export interface SisWebYearTable {
+  year_id: number;
+  year_title: string | null;
+  year_thumbnail: string | null;
+  year_category: number | null;
+  year_photo_path: string | null;
+  year_status: number | null;
+  created_by: number | null;
+  created_on: Date;
+}
+export interface MasterSessionTable {
+  id: number;
+  session_name: string | null;
+  session_startdate: Date | null;
+  session_enddate: Date | null;
+  schoolid: string | null;
+  status: number | null;
+  entrydate: Date | null;
+  updatedate: Date | null;
+}
+
 // Export all the Tables
 export interface Database {
   master_school: MasterSchoolTable;
@@ -129,4 +149,8 @@ export interface Database {
   sis_web_gallery: SisWebGalleryTable;
   sis_blog: SisBlogsTable;
   blog_category: SisBlogCategoryTable;
+  sis_web_year: SisWebYearTable;
+  master_session: MasterSessionTable;
 }
+
+

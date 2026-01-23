@@ -1,6 +1,6 @@
 // CORE //
 import { Inject, Injectable, BadRequestException } from "@nestjs/common";
-import { Kysely } from "kysely";
+import { Kysely, sql } from "kysely";
 
 // DB Schema //
 import { Database } from "../../core/database/schema";
@@ -19,26 +19,23 @@ export class AlbumsService {
    *
    * @param year - The year to filter albums by.
    */
-  async getAlbumsByYear(year: number) {
+    async getAlbumsByYear(year: string) {
     try {
-      const startDate = new Date(`${year}-01-01T00:00:00`);
-      const endDate = new Date(`${year}-12-31T23:59:59`);
-
       // Query albums matching the year range
+      // The gallery_year column refers to sis_web_year (e.g. id=1 -> "2025")
       const albums = await this.db
-        .selectFrom(Tables.GALLERY)
-        // Select from sis_web_gallery table
+        .selectFrom(`${Tables.GALLERY} as sg`)
+        .innerJoin(`${Tables.YEAR} as sy`, "sg.gallery_year", "sy.year_id")
         .select([
-          "gallery_id as id",
-          "gallery_title as title",
-          "gallery_sub_title as sub_title",
-          "gallery_thumbnail as thumbnail",
-          "gallery_photo_path as photo_path",
+          "sg.gallery_id as id",
+          "sg.gallery_title as title",
+          "sg.gallery_sub_title as sub_title",
+          "sg.gallery_thumbnail as thumbnail",
+          "sg.gallery_photo_path as photo_path",
         ])
-        .where("created_on", ">=", startDate)
-        .where("created_on", "<=", endDate)
+        .where("sy.year_title", "=", year)
         // Sort by creation date in descending order (newest first)
-        .orderBy("created_on", "desc")
+        .orderBy("sg.created_on", "desc")
         // Execute the Kysely query
         .execute();
       

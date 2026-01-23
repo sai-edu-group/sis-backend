@@ -28,14 +28,17 @@ export class ResultsService {
       throw new InternalServerErrorException("Invalid year");
     }
 
-    // Build full-year datetime range
-    const start = new Date(year, 0, 1, 0, 0, 0, 0);
-    const end = new Date(year, 11, 31, 23, 59, 59, 999);
-
     try {
       const rows = await this.db
         .selectFrom(`${Tables.CBSE_RESULTS} as r`)
         .leftJoin(`${Tables.CLASSES} as cl`, "cl.id", "r.class_name")
+        .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+          join.on(
+            sql`CAST(r.session_name AS CHAR)`,
+            "=",
+            sql`CAST(ms.id AS CHAR)`
+          )
+        )
         .select([
           "r.studname as studentName",
           "r.studprofilepic as studentProfilePic",
@@ -44,8 +47,7 @@ export class ResultsService {
         ])
         .where("r.status", "=", 1)
         .where("r.class_name", "=", classId)
-        .where("r.entrydate", ">=", start)
-        .where("r.entrydate", "<=", end)
+        .where(sql<boolean>`YEAR(ms.session_enddate) = ${year}`)
         .orderBy("r.percentage", "desc")
         .execute();
 

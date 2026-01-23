@@ -39,7 +39,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@types/express": "^5.0.0",
-    "@types/node": "^22.10.7",
+    "@types/node": "^22.19.7",
     "@vercel/node": "^5.5.14",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",

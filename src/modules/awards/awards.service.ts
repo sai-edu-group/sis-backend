@@ -1,6 +1,6 @@
 // CORE //
 import { Inject, Injectable } from "@nestjs/common";
-import { Kysely } from "kysely";
+import { Kysely, sql } from "kysely";
 
 // DB Schema //
 import { Database } from "../../core/database/schema";
@@ -34,28 +34,32 @@ export class AwardsService {
   /**
    * Get awards by year.
    *
-   * @param year - The year to filter awards by.
+   * @param year - The year to filter awards by (e.g., "2025").
    */
-  // Retrieve active awards for a specific year, sorted by newest first
-  async getAwardsByYear(year: number) {
+  // Retrieve active awards for a specific year using sis_web_year, sorted by newest first
+  async getAwardsByYear(year: string) {
     try {
-      // Create start and end date boundaries for the given year
-      const startDate = new Date(`${year}-01-01`);
-      const endDate = new Date(`${year}-12-31`);
-
-      // Query awards matching the year range and active status
+      // Query awards matching the year and active status by joining with master_session
       return this.db
-        .selectFrom(Tables.AWARDS)
+        .selectFrom(`${Tables.AWARDS} as sa`)
+        // using sql cast for join to handle potential type mismatch (string session_name vs int id)
+        .innerJoin("master_session as ms", (join) =>
+          join.on(
+            sql`CAST(sa.session_name AS CHAR)`,
+            "=",
+            sql`CAST(ms.id AS CHAR)`
+          )
+        )
         .select([
-          "id",
-          "awardname as awardName",
-          "awarddesc as awardDesc",
-          "thumbnailimg as thumbnailImg",
+          "sa.id",
+          "sa.awardname as awardName",
+          "sa.awarddesc as awardDesc",
+          "sa.thumbnailimg as thumbnailImg",
         ])
-        .where("status", "=", 1)
-        .where("entrydate", ">=", startDate)
-        .where("entrydate", "<=", endDate)
-        .orderBy("entrydate", "desc")
+        .where("sa.status", "=", 1)
+        // match year of master_session.session_enddate with requested year
+        .where(sql<boolean>`YEAR(ms.session_enddate) = ${year}`)
+        .orderBy("sa.entrydate", "desc")
         .execute();
     } catch (error) {
       throw error;

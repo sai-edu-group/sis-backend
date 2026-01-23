@@ -1,6 +1,6 @@
 // OTHERS //
 import { Inject, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { Kysely } from "kysely";
+import { Kysely, sql } from "kysely";
 
 // DATA //
 import { Database } from "../../core/database/schema";
@@ -17,26 +17,27 @@ export class SioneersService {
    * @throws InternalServerErrorException
    */
   async getSioneersByYear(year: number) {
-    // Define start and end dates for the academic year
-    const start = new Date(year, 0, 1, 0, 0, 0, 0);
-    const end = new Date(year, 11, 31, 23, 59, 59, 999);
-
     // Query to the database where display sioneers within the date range also status is active (1)
     try {
       const row = await this.db
-        .selectFrom(Tables.GLOBAL_SAIONEERS)
+        .selectFrom(`${Tables.GLOBAL_SAIONEERS} as s`)
+        .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+          join.on(
+            sql`CAST(s.session_name AS CHAR)`,
+            "=",
+            sql`CAST(ms.id AS CHAR)`
+          )
+        )
         .select([
-          "id",
-          "admno as admissionNumber",
-          "univname as universityName",
-          "class_name as className",
-          "studprofilepic as profilePicture",
-          "countryname as countryName",
+          "s.id",
+          "s.admno as admissionNumber",
+          "s.univname as universityName",
+          "s.studprofilepic as profilePicture",
+          "s.countryname as countryName",
         ])
-        .where("status", "=", 1)
-        .where("entrydate", ">=", start)
-        .where("entrydate", "<=", end)
-        .orderBy("id")
+        .where("s.status", "=", 1)
+        .where(sql<boolean>`YEAR(ms.session_enddate) = ${year}`)
+        .orderBy("s.id")
         .execute();
       return row;
     } catch (error) {
