@@ -1,6 +1,6 @@
 // CORE //
 import { Inject, Injectable, BadRequestException } from "@nestjs/common";
-import { Kysely } from "kysely";
+import { Kysely, sql } from "kysely";
 
 // DB Schema //
 import { Database } from "../../core/database/schema";
@@ -21,13 +21,11 @@ export class AlbumsService {
    */
   async getAlbumsByYear(year: number) {
     try {
-      const startDate = new Date(`${year}-01-01T00:00:00`);
-      const endDate = new Date(`${year}-12-31T23:59:59`);
-
       // Query albums matching the year range
       const albums = await this.db
         .selectFrom(Tables.GALLERY)
         // Select from sis_web_gallery table
+        .innerJoin(Tables.YEAR, "gallery_year", "year_id")
         .select([
           "gallery_id as id",
           "gallery_title as title",
@@ -35,10 +33,9 @@ export class AlbumsService {
           "gallery_thumbnail as thumbnail",
           "gallery_photo_path as photo_path",
         ])
-        .where("created_on", ">=", startDate)
-        .where("created_on", "<=", endDate)
+        .where(sql`sis_web_year.year_title`, "=", year.toString())
         // Sort by creation date in descending order (newest first)
-        .orderBy("created_on", "desc")
+        .orderBy("sis_web_gallery.created_on", "desc")
         // Execute the Kysely query
         .execute();
       

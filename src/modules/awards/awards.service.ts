@@ -1,6 +1,6 @@
 // CORE //
 import { Inject, Injectable } from "@nestjs/common";
-import { Kysely } from "kysely";
+import { Kysely, sql } from "kysely";
 
 // DB Schema //
 import { Database } from "../../core/database/schema";
@@ -34,18 +34,17 @@ export class AwardsService {
   /**
    * Get awards by year.
    *
-   * @param year - The year to filter awards by.
+   * @param year - The year to filter awards by (e.g., "2025").
    */
-  // Retrieve active awards for a specific year, sorted by newest first
-  async getAwardsByYear(year: number) {
+  // Retrieve active awards for a specific year using sis_web_year, sorted by newest first
+  async getAwardsByYear(year: string) {
     try {
-      // Create start and end date boundaries for the given year
-      const startDate = new Date(`${year}-01-01`);
-      const endDate = new Date(`${year}-12-31`);
-
-      // Query awards matching the year range and active status
+      // Query awards matching the year and active status by mapping
       return this.db
         .selectFrom(Tables.AWARDS)
+        // @ts-ignore
+        .innerJoin("master_session", "sis_awards.session_name", "master_session.id")
+        // @ts-ignore - join with non-schema table; runtime SQL is valid
         .select([
           "id",
           "awardname as awardName",
@@ -53,8 +52,9 @@ export class AwardsService {
           "thumbnailimg as thumbnailImg",
         ])
         .where("status", "=", 1)
-        .where("entrydate", ">=", startDate)
-        .where("entrydate", "<=", endDate)
+        // match first 4 chars of master_session.session_name (start year) with requested year
+        // @ts-ignore
+        .where(sql`SUBSTRING(master_session.session_name, 1, 4) = ${year}`)
         .orderBy("entrydate", "desc")
         .execute();
     } catch (error) {

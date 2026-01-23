@@ -10,4 +10,5 @@ export enum Tables {
   GALLERY = "sis_web_gallery",
   BLOGS = "sis_blog",
   BLOG_CATEGORY = "blog_category",
+  YEAR = "sis_web_year",
 }

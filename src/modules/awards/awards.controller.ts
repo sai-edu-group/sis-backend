@@ -32,7 +32,7 @@ export class AwardsController {
       throw new BadRequestException("Query parameter 'year' is required.");
     }
 
-    // Convert the 'year' query parameter from a string to a number
+    // Validate that year query parameter is numeric
     const numericYear = Number(year);
 
     // Validation block for checking input year
@@ -40,6 +40,6 @@ export class AwardsController {
       throw new BadRequestException("Year must be a valid number.");
     }
 
-    return this.awardsService.getAwardsByYear(numericYear);
+    return this.awardsService.getAwardsByYear(year);
   }
 }

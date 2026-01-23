@@ -117,6 +117,17 @@ export interface SisBlogCategoryTable {
   created_on: Date;
 }
 
+export interface SisWebYearTable {
+  year_id: number;
+  year_title: string | null;
+  year_thumbnail: string | null;
+  year_category: number | null;
+  year_photo_path: string | null;
+  year_status: number | null;
+  created_by: number | null;
+  created_on: Date;
+}
+
 // Export all the Tables
 export interface Database {
   master_school: MasterSchoolTable;
@@ -129,4 +140,5 @@ export interface Database {
   sis_web_gallery: SisWebGalleryTable;
   sis_blog: SisBlogsTable;
   blog_category: SisBlogCategoryTable;
+  sis_web_year: SisWebYearTable;
 }
