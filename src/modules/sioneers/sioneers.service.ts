@@ -29,7 +29,6 @@ export class SioneersService {
           "id",
           "admno as admissionNumber",
           "univname as universityName",
-          "class_name as className",
           "studprofilepic as profilePicture",
           "countryname as countryName",
         ])

@@ -74,7 +74,6 @@ export interface WebGlobalSaioneersTable {
   session_name: string;
   admno: string;
   univname: string;
-  class_name: string;
   studprofilepic: string | null;
   countryname: string;
   status: number;
