@@ -13,6 +13,7 @@ export interface SisAwardsTable {
   thumbnailimg: string | null;
   status: number;
   entrydate: Date;
+  awardrecdate: Date;
   updatedate: Date;
 }
 
@@ -152,5 +153,3 @@ export interface Database {
   sis_web_year: SisWebYearTable;
   master_session: MasterSessionTable;
 }
-
-
