@@ -120,7 +120,7 @@ export class BlogsService {
   async getBlogById(id: number) {
     try {
       // Build the Query and Execute
-      return await this.db
+      const blog = await this.db
         .selectFrom(BLOG_TABLE)
         .leftJoin(BLOG_CATEGORY_TABLE, "sis_blog.blog_category", "blog_category.category_id")
         .select([
@@ -130,7 +130,7 @@ export class BlogsService {
           "sis_blog.blog_thumbnail as thumbnail",
           "sis_blog.blog_banner as banner",
           "sis_blog.blog_photo_path as photo_path",
-          "sis_blog.blog_photo as photo",
+          "sis_blog.blog_photo as photos",
           "sis_blog.created_on",
           // If null then make it "SAI"
           sql`COALESCE(blog_category.category_title, 'SAI')`.as("category_name"),
@@ -138,6 +138,13 @@ export class BlogsService {
         .where("sis_blog.blog_id", "=", id)
         .where("sis_blog.blog_status", "=", 1)
         .executeTakeFirst();
+
+      if (!blog) return null;
+
+      return {
+        ...blog,
+        photos: blog.photos ? blog.photos.split(",").map((p: string) => p.trim()) : [],
+      };
     } catch (error) {
       throw error;
     }
