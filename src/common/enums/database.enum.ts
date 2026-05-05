@@ -2,6 +2,7 @@
 export enum Tables {
   AWARDS = "sis_awards",
   CBSE_RESULTS = "result_cbse_sis",
+  CAREER_RESULTS = "result_career_sis",
   SCHOOLS = "master_school",
   CLASSES = "master_class",
   PRESS_RELEASES = "web_sis_pressrelease",
