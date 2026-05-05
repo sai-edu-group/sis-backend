@@ -38,6 +38,7 @@ export class CareerResultsService {
         },
       };
     } catch (error) {
+      console.error("Career results list query failed:", error);
       throw new InternalServerErrorException("Unable to fetch career results");
     }
   }
@@ -83,6 +84,7 @@ export class CareerResultsService {
         throw error;
       }
 
+      console.error("Career results detail query failed:", error);
       throw new InternalServerErrorException("Unable to fetch career result details");
     }
   }
