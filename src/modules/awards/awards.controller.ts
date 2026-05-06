@@ -18,28 +18,32 @@ export class AwardsController {
   }
 
   /**
+   * GET: /awards/get-sessions
+   * Returns all available award sessions sorted from latest to oldest.
+   */
+  @Get("get-sessions")
+  getAwardSessions() {
+    return this.awardsService.getAwardSessions();
+  }
+
+  /**
    * GET: /awards/get-awards
    *
-   * Fetch awards by a given year.
-   *
-   * @param year - Query parameter specifying the year.
-   * @throws BadRequestException - If year is missing or not numeric.
+   * Fetch awards by session name. `year` is accepted temporarily as a fallback
+   * to preserve compatibility with the current frontend until it is updated.
    */
   @Get("get-awards")
-  getAwardsByYear(@Query("year") year: string) {
-    // --- Validation ---
-    if (!year) {
-      throw new BadRequestException("Query parameter 'year' is required.");
+  getAwards(
+    @Query("session") sessionName?: string,
+  ) {
+    if (!sessionName) {
+      throw new BadRequestException(
+        "Query parameter 'sessionName' is required.",
+      );
     }
 
-    // Validate that year query parameter is numeric
-    const numericYear = Number(year);
-
-    // Validation block for checking input year
-    if (isNaN(numericYear)) {
-      throw new BadRequestException("Year must be a valid number.");
+    if (sessionName) {
+      return this.awardsService.getAwards({ sessionName });
     }
-
-    return this.awardsService.getAwardsByYear(year);
   }
 }

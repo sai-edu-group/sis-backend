@@ -33,33 +33,59 @@ export class AwardsService {
   }
 
   /**
-   * Get awards by year.
-   *
-   * @param year - The year to filter awards by (e.g., "2025").
+   * Get distinct award sessions sorted from latest to oldest.
    */
-  // Retrieve active awards for a specific year using sis_web_year, sorted by newest first
-  async getAwardsByYear(year: string) {
+  async getAwardSessions() {
+    return this.db
+      .selectFrom(`${Tables.AWARDS} as sa`)
+      .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+        join.on(sql`CAST(sa.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
+      )
+      .select([
+        "ms.id as sessionId",
+        "ms.session_name as sessionName",
+        "ms.session_enddate as sessionEndDate",
+      ])
+      .where("sa.status", "=", 1)
+      .where("ms.status", "=", 1)
+      .where("ms.session_name", "is not", null)
+      .distinct()
+      .orderBy("ms.session_enddate", "desc")
+      .execute();
+  }
+
+  /**
+   * Get awards by session name.
+   *
+   * `year` is kept as a fallback so the existing frontend does not break
+   * while the client switches to sending `sessionName`.
+   */
+  async getAwards(filters: { sessionName?: string; year?: number }) {
+    const { sessionName, year } = filters;
+
     try {
-      // Query awards matching the year and active status by joining with master_session
-      return (
-        this.db
-          .selectFrom(`${Tables.AWARDS} as sa`)
-          // using sql cast for join to handle potential type mismatch (string session_name vs int id)
-          .innerJoin("master_session as ms", (join) =>
-            join.on(sql`CAST(sa.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
-          )
-          .select([
-            "sa.id",
-            "sa.awardname as awardName",
-            "sa.awarddesc as awardDesc",
-            "sa.thumbnailimg as thumbnailImg",
-          ])
-          .where("sa.status", "=", 1)
-          // match year of master_session.session_enddate with requested year
-          .where(sql<boolean>`YEAR(ms.session_enddate) = ${year}`)
-          .orderBy("sa.entrydate", "desc")
-          .execute()
-      );
+      let query = this.db
+        .selectFrom(`${Tables.AWARDS} as sa`)
+        .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+          join.on(sql`CAST(sa.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
+        )
+        .select([
+          "sa.id",
+          "sa.awardname as awardName",
+          "sa.awarddesc as awardDesc",
+          "sa.thumbnailimg as thumbnailImg",
+          "ms.session_name as sessionName",
+        ])
+        .where("sa.status", "=", 1)
+        .where("ms.status", "=", 1);
+
+      if (sessionName) {
+        query = query.where("ms.session_name", "=", sessionName);
+      } else if (typeof year === "number") {
+        query = query.where(sql<boolean>`YEAR(ms.session_enddate) = ${year}`);
+      }
+
+      return query.orderBy("sa.entrydate", "desc").execute();
     } catch (error) {
       throw error;
     }
