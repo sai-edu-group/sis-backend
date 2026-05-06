@@ -21,20 +21,45 @@ type CareerExamSummary = {
   cardImage: string;
 };
 
+type CareerExamListItem = {
+  name: string;
+  slug: string;
+  cardImage: string;
+};
+
 @Injectable()
 export class CareerResultsService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
+  async getCareerResultSessions() {
+    return this.db
+      .selectFrom(`${Tables.CAREER_RESULTS} as r`)
+      .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+        join.on(sql`CAST(r.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
+      )
+      .select([
+        "ms.id as sessionId",
+        "ms.session_name as sessionName",
+        "ms.session_enddate as sessionEndDate",
+      ])
+      .where("r.status", "=", 1)
+      .where("ms.status", "=", 1)
+      .where("ms.session_name", "is not", null)
+      .distinct()
+      .orderBy("ms.session_enddate", "desc")
+      .execute();
+  }
+
   async getCareerResultsList() {
     try {
       const rows = await this.fetchCareerRows();
+      const summaries = this.buildExamSummaries(rows);
 
       return {
         status: true,
         statusCode: 200,
         data: {
-          view: "list" as const,
-          exams: this.buildExamSummaries(rows),
+          exams: this.buildExamListItems(summaries),
         },
       };
     } catch (error) {
@@ -43,43 +68,34 @@ export class CareerResultsService {
     }
   }
 
-  async getCareerResultsDetail(examSlug: string) {
+  async getCareerResultsDetail(examSlug: string, session: string) {
     try {
       const rows = await this.fetchCareerRows();
       const summaries = this.buildExamSummaries(rows);
       const normalizedSlug = this.slugify(examSlug);
       const exam = summaries.find((item) => item.slug === normalizedSlug);
+      const normalizedSession = session.trim();
 
       if (!exam) {
         throw new NotFoundException(`Career exam '${examSlug}' not found`);
       }
 
       const examRows = rows.filter((row) => this.slugify(row.examName) === exam.slug);
-      const groupedResults = exam.availableSessions.map((sessionName) => ({
-        sessionName,
-        results: examRows
-          .filter((row) => row.sessionName === sessionName)
-          .map((row) => ({
-            id: row.id,
-            studentName: row.studentName,
-            studentProfilePic: row.studentProfilePic,
-            percentage: row.percentage ?? "",
-          })),
-      }));
+
+      const filteredResults = examRows
+        .filter((row) => row.sessionName === normalizedSession)
+        .map((row) => ({
+          id: row.id,
+          studentName: row.studentName,
+          studentProfilePic: row.studentProfilePic,
+          percentage: row.percentage ?? "",
+        }));
 
       return {
         status: true,
         statusCode: 200,
         data: {
-          view: "detail" as const,
-          exam: {
-            name: exam.name,
-            slug: exam.slug,
-            availableSessions: exam.availableSessions,
-            defaultSession: exam.defaultSession,
-            cardImage: exam.cardImage,
-            sessions: groupedResults,
-          },
+          results: filteredResults,
         },
       };
     } catch (error) {
@@ -147,6 +163,14 @@ export class CareerResultsService {
     }
 
     return Array.from(examMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  private buildExamListItems(exams: CareerExamSummary[]): CareerExamListItem[] {
+    return exams.map(({ name, slug, cardImage }) => ({
+      name,
+      slug,
+      cardImage,
+    }));
   }
 
   private slugify(value: string): string {
