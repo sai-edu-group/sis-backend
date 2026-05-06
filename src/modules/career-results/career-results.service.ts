@@ -10,14 +10,14 @@ type CareerResultRow = {
   studentName: string;
   studentProfilePic: string | null;
   percentage: string | null;
-  year: number;
+  sessionName: string;
 };
 
 type CareerExamSummary = {
   name: string;
   slug: string;
-  availableYears: number[];
-  defaultYear: number;
+  availableSessions: string[];
+  defaultSession: string;
   cardImage: string;
 };
 
@@ -43,7 +43,7 @@ export class CareerResultsService {
     }
   }
 
-  async getCareerResultsDetail(examSlug: string, year?: number) {
+  async getCareerResultsDetail(examSlug: string) {
     try {
       const rows = await this.fetchCareerRows();
       const summaries = this.buildExamSummaries(rows);
@@ -54,15 +54,18 @@ export class CareerResultsService {
         throw new NotFoundException(`Career exam '${examSlug}' not found`);
       }
 
-      const selectedYear = year ?? exam.defaultYear;
-      const results = rows
-        .filter((row) => this.slugify(row.examName) === exam.slug && row.year === selectedYear)
-        .map((row) => ({
-          id: row.id,
-          studentName: row.studentName,
-          studentProfilePic: row.studentProfilePic,
-          percentage: row.percentage ?? "",
-        }));
+      const examRows = rows.filter((row) => this.slugify(row.examName) === exam.slug);
+      const groupedResults = exam.availableSessions.map((sessionName) => ({
+        sessionName,
+        results: examRows
+          .filter((row) => row.sessionName === sessionName)
+          .map((row) => ({
+            id: row.id,
+            studentName: row.studentName,
+            studentProfilePic: row.studentProfilePic,
+            percentage: row.percentage ?? "",
+          })),
+      }));
 
       return {
         status: true,
@@ -72,10 +75,10 @@ export class CareerResultsService {
           exam: {
             name: exam.name,
             slug: exam.slug,
-            availableYears: exam.availableYears,
-            selectedYear,
+            availableSessions: exam.availableSessions,
+            defaultSession: exam.defaultSession,
             cardImage: exam.cardImage,
-            results,
+            sessions: groupedResults,
           },
         },
       };
@@ -92,7 +95,7 @@ export class CareerResultsService {
   private async fetchCareerRows(): Promise<CareerResultRow[]> {
     return this.db
       .selectFrom(`${Tables.CAREER_RESULTS} as r`)
-      .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+      .leftJoin(`${Tables.SESSION} as ms`, (join) =>
         join.on(sql`CAST(r.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
       )
       .select([
@@ -101,11 +104,17 @@ export class CareerResultsService {
         "r.studname as studentName",
         "r.studprofilepic as studentProfilePic",
         "r.percentage as percentage",
-        sql<number>`YEAR(ms.session_enddate)`.as("year"),
+        sql<string>`COALESCE(NULLIF(TRIM(ms.session_name), ''), NULLIF(TRIM(r.session_name), ''))`.as(
+          "sessionName",
+        ),
       ])
       .where("r.status", "=", 1)
       .where(sql<boolean>`TRIM(COALESCE(r.examname, '')) <> ''`)
       .where(sql<boolean>`TRIM(COALESCE(r.studname, '')) <> ''`)
+      .where(
+        sql<boolean>`COALESCE(NULLIF(TRIM(ms.session_name), ''), NULLIF(TRIM(r.session_name), '')) IS NOT NULL`,
+      )
+      .orderBy("ms.session_name", "desc")
       .orderBy(sql<number>`CAST(COALESCE(NULLIF(r.percentage, ''), '0') AS DECIMAL(10,2))`, "desc")
       .orderBy("r.studname", "asc")
       .execute() as Promise<CareerResultRow[]>;
@@ -123,17 +132,17 @@ export class CareerResultsService {
         examMap.set(slug, {
           name,
           slug,
-          availableYears: [row.year],
-          defaultYear: row.year,
+          availableSessions: [row.sessionName],
+          defaultSession: row.sessionName,
           cardImage: `/results/career/${slug}.jpg`,
         });
         continue;
       }
 
-      if (!existing.availableYears.includes(row.year)) {
-        existing.availableYears.push(row.year);
-        existing.availableYears.sort((a, b) => b - a);
-        existing.defaultYear = existing.availableYears[0];
+      if (!existing.availableSessions.includes(row.sessionName)) {
+        existing.availableSessions.push(row.sessionName);
+        existing.availableSessions.sort((a, b) => b.localeCompare(a));
+        existing.defaultSession = existing.availableSessions[0];
       }
     }
 

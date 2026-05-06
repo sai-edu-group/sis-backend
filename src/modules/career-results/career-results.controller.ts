@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Param } from "@nestjs/common";
 
 import { CareerResultsService } from "./career-results.service";
 
@@ -6,28 +6,13 @@ import { CareerResultsService } from "./career-results.service";
 export class CareerResultsController {
   constructor(private readonly careerResultsService: CareerResultsService) {}
 
-  @Get()
-  async getCareerResults(@Query("exam") exam?: string, @Query("year") year?: string) {
-    const normalizedExam = exam?.trim();
+  @Get("exams")
+  async getCareerResultsList() {
+    return this.careerResultsService.getCareerResultsList();
+  }
 
-    if (year && !normalizedExam) {
-      throw new BadRequestException("exam query parameter is required when year is provided");
-    }
-
-    let yearNumber: number | undefined;
-
-    if (year) {
-      yearNumber = Number(year);
-
-      if (!Number.isInteger(yearNumber) || isNaN(yearNumber)) {
-        throw new BadRequestException("year must be a valid integer");
-      }
-    }
-
-    if (!normalizedExam) {
-      return this.careerResultsService.getCareerResultsList();
-    }
-
-    return this.careerResultsService.getCareerResultsDetail(normalizedExam, yearNumber);
+  @Get(":examSlug")
+  async getCareerResultsDetail(@Param("examSlug") examSlug: string) {
+    return this.careerResultsService.getCareerResultsDetail(examSlug);
   }
 }
