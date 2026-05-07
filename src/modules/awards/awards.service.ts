@@ -15,42 +15,31 @@ export class AwardsService {
 
   /**
    * Get the latest awards from the database.
+   *
+   * `year` is kept for backward compatibility while clients switch to
+   * consuming `sessionName`.
    */
   async getLatestAwards() {
     return this.db
-      .selectFrom(Tables.AWARDS)
-      .select([
-        "id",
-        "awardname as awardName",
-        "awarddesc as awardDesc",
-        "thumbnailimg as thumbnailImg",
-        sql<number>`YEAR(awardrecdate)`.as("year"),
-      ])
-      .where("status", "=", 1)
-      .orderBy("awardrecdate", "desc")
-      .limit(Limits.LATEST_AWARDS)
-      .execute();
-  }
-
-  /**
-   * Get distinct award sessions sorted from latest to oldest.
-   */
-  async getAwardSessions() {
-    return this.db
       .selectFrom(`${Tables.AWARDS} as sa`)
       .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-        join.on(sql`CAST(sa.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
+        join.on(
+          sql`CAST(sa.session_name AS CHAR)`,
+          "=",
+          sql`CAST(ms.id AS CHAR)`,
+        ),
       )
       .select([
-        "ms.id as sessionId",
+        "sa.id",
+        "sa.awardname as awardName",
+        "sa.awarddesc as awardDesc",
+        "sa.thumbnailimg as thumbnailImg",
         "ms.session_name as sessionName",
-        "ms.session_enddate as sessionEndDate",
       ])
       .where("sa.status", "=", 1)
       .where("ms.status", "=", 1)
-      .where("ms.session_name", "is not", null)
-      .distinct()
-      .orderBy("ms.session_enddate", "desc")
+      .orderBy("sa.awardrecdate", "desc")
+      .limit(Limits.LATEST_AWARDS)
       .execute();
   }
 

@@ -18,15 +18,6 @@ export class AwardsController {
   }
 
   /**
-   * GET: /awards/get-sessions
-   * Returns all available award sessions sorted from latest to oldest.
-   */
-  @Get("get-sessions")
-  getAwardSessions() {
-    return this.awardsService.getAwardSessions();
-  }
-
-  /**
    * GET: /awards/get-awards
    *
    * Fetch awards by session name. `year` is accepted temporarily as a fallback
