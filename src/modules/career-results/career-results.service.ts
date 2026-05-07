@@ -31,25 +31,6 @@ type CareerExamListItem = {
 export class CareerResultsService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
-  async getCareerResultSessions() {
-    return this.db
-      .selectFrom(`${Tables.CAREER_RESULTS} as r`)
-      .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-        join.on(sql`CAST(r.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
-      )
-      .select([
-        "ms.id as sessionId",
-        "ms.session_name as sessionName",
-        "ms.session_enddate as sessionEndDate",
-      ])
-      .where("r.status", "=", 1)
-      .where("ms.status", "=", 1)
-      .where("ms.session_name", "is not", null)
-      .distinct()
-      .orderBy("ms.session_enddate", "desc")
-      .execute();
-  }
-
   async getCareerResultsList() {
     try {
       const rows = await this.fetchCareerRows();

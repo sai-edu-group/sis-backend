@@ -9,6 +9,7 @@ import { ResultsModule } from "./modules/results/results.module";
 import { BlogsModule } from "./modules/blogs/blogs.module";
 import { StudentCouncilModule } from "./modules/student-council/student-council.module";
 import { CareerResultsModule } from "./modules/career-results/career-results.module";
+import { SessionsModule } from "./modules/sessions/sessions.module";
 
 // CONTROLLERS //
 import { AppController } from "./app.controller";
@@ -33,6 +34,7 @@ import { ConfigModule } from "@nestjs/config";
     BlogsModule,
     StudentCouncilModule,
     CareerResultsModule,
+    SessionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

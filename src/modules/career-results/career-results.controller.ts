@@ -6,11 +6,6 @@ import { CareerResultsService } from "./career-results.service";
 export class CareerResultsController {
   constructor(private readonly careerResultsService: CareerResultsService) {}
 
-  @Get("get-sessions")
-  async getCareerResultSessions() {
-    return this.careerResultsService.getCareerResultSessions();
-  }
-
   @Get("exams")
   async getCareerResultsList() {
     return this.careerResultsService.getCareerResultsList();
