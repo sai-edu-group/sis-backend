@@ -39,9 +39,7 @@ export class CareerResultsService {
       return {
         status: true,
         statusCode: 200,
-        data: {
-          exams: this.buildExamListItems(summaries),
-        },
+        data: this.buildExamListItems(summaries),
       };
     } catch (error) {
       console.error("Career results list query failed:", error);
@@ -75,9 +73,7 @@ export class CareerResultsService {
       return {
         status: true,
         statusCode: 200,
-        data: {
-          results: filteredResults,
-        },
+        data: filteredResults,
       };
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -92,12 +88,17 @@ export class CareerResultsService {
   private async fetchCareerRows(): Promise<CareerResultRow[]> {
     return this.db
       .selectFrom(`${Tables.CAREER_RESULTS} as r`)
+      .leftJoin(`${Tables.EXAMS} as ce`, (join) =>
+        join.on(sql`CAST(r.examname AS CHAR)`, "=", sql`CAST(ce.id AS CHAR)`),
+      )
       .leftJoin(`${Tables.SESSION} as ms`, (join) =>
         join.on(sql`CAST(r.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
       )
       .select([
         "r.id as id",
-        "r.examname as examName",
+        sql<string>`COALESCE(NULLIF(TRIM(ce.career_exam_name), ''), NULLIF(TRIM(r.examname), ''))`.as(
+          "examName",
+        ),
         "r.studname as studentName",
         "r.studprofilepic as studentProfilePic",
         "r.percentage as percentage",
@@ -106,13 +107,15 @@ export class CareerResultsService {
         ),
       ])
       .where("r.status", "=", 1)
-      .where(sql<boolean>`TRIM(COALESCE(r.examname, '')) <> ''`)
+      .where(
+        sql<boolean>`COALESCE(NULLIF(TRIM(ce.career_exam_name), ''), NULLIF(TRIM(r.examname), '')) IS NOT NULL`,
+      )
       .where(sql<boolean>`TRIM(COALESCE(r.studname, '')) <> ''`)
       .where(
         sql<boolean>`COALESCE(NULLIF(TRIM(ms.session_name), ''), NULLIF(TRIM(r.session_name), '')) IS NOT NULL`,
       )
       .orderBy("ms.session_name", "desc")
-      .orderBy(sql<number>`CAST(COALESCE(NULLIF(r.percentage, ''), '0') AS DECIMAL(10,2))`, "desc")
+      .orderBy(sql<number>`CAST(COALESCE(NULLIF(r.percentage, ''), '0') AS DECIMAL(10,2))`, "asc")
       .orderBy("r.studname", "asc")
       .execute() as Promise<CareerResultRow[]>;
   }

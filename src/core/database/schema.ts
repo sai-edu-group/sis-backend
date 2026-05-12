@@ -153,6 +153,14 @@ export interface MasterSessionTable {
   updatedate: Date | null;
 }
 
+export interface MasterCareerExamTable {
+  id: number;
+  career_exam_name: string | null;
+  status: number | null;
+  entrydate: Date | null;
+  updatedate: Date | null;
+}
+
 // Export all the Tables
 export interface Database {
   master_school: MasterSchoolTable;
@@ -168,4 +176,5 @@ export interface Database {
   blog_category: SisBlogCategoryTable;
   sis_web_year: SisWebYearTable;
   master_session: MasterSessionTable;
+  master_careerexam: MasterCareerExamTable;
 }
