@@ -30,6 +30,21 @@ export interface ResultCbseSisTable {
   updatedate: Date;
 }
 
+export interface ResultCareerSisTable {
+  id: number;
+  session_name: string | null;
+  admno: string | null;
+  studname: string | null;
+  class_name: string | null;
+  studprofilepic: string | null;
+  examname: string | null;
+  percentage: string | null;
+  schoolid: string | null;
+  status: number | null;
+  entrydate: Date | null;
+  updatedate: Date | null;
+}
+
 export interface MasterClassTable {
   id: number;
   class_name: string;
@@ -138,11 +153,20 @@ export interface MasterSessionTable {
   updatedate: Date | null;
 }
 
+export interface MasterCareerExamTable {
+  id: number;
+  career_exam_name: string | null;
+  status: number | null;
+  entrydate: Date | null;
+  updatedate: Date | null;
+}
+
 // Export all the Tables
 export interface Database {
   master_school: MasterSchoolTable;
   sis_awards: SisAwardsTable;
   result_cbse_sis: ResultCbseSisTable;
+  result_career_sis: ResultCareerSisTable;
   master_class: MasterClassTable;
   web_sis_pressrelease: WebSisPressreleaseTable;
   web_sis_scouncil: WebSisScouncilTable;
@@ -152,4 +176,5 @@ export interface Database {
   blog_category: SisBlogCategoryTable;
   sis_web_year: SisWebYearTable;
   master_session: MasterSessionTable;
+  master_careerexam: MasterCareerExamTable;
 }
