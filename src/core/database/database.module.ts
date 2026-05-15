@@ -14,7 +14,7 @@ import { Database } from "../database/schema";
           pool: createPool({
             host: configService.get<string>("DB_HOST"),
             user: configService.get<string>("DB_USER"),
-            password: configService.get<string>("DB_PASS"),
+            password: configService.get<string>("DB_PASSWORD"),
             database: configService.get<string>("DB_NAME"),
             port: configService.get<number>("DB_PORT", 3306),
             connectionLimit: 10,
