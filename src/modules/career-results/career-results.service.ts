@@ -1,8 +1,8 @@
 import { Inject, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { Kysely, sql } from "kysely";
 
-import { Tables } from "@/common/enums/database.enum";
-import { Database } from "@/core/database/schema";
+import { Tables } from "../../common/enums/database.enum";
+import { Database } from "../../core/database/schema";
 
 type CareerResultRow = {
   id: number;
