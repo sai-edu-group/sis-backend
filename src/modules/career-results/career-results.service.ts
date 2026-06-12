@@ -1,5 +1,9 @@
-import { Inject, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { Kysely, sql } from "kysely";
 
 import { Tables } from "../../common/enums/database.enum";
@@ -30,17 +34,6 @@ type CareerExamListItem = {
 
 @Injectable()
 export class CareerResultsService {
-  private readonly imageBaseUrl: string;
-
-  constructor(
-    @Inject("DB") private readonly db: Kysely<Database>,
-    private readonly configService: ConfigService,
-  ) {
-    this.imageBaseUrl = this.normalizeBaseUrl(
-      this.configService.get<string>("CAREER_RESULTS_IMAGE_BASE_URL", ""),
-    );
-  }
-
   async getCareerResultsList() {
     try {
       const rows = await this.fetchCareerRows();
@@ -76,7 +69,7 @@ export class CareerResultsService {
         .map((row) => ({
           id: row.id,
           studentName: row.studentName,
-          studentProfilePic: this.resolveStudentImageUrl(row.studentProfilePic),
+          studentProfilePic: row.studentProfilePic,
           percentage: row.percentage ?? "",
         }));
 
@@ -165,24 +158,6 @@ export class CareerResultsService {
       slug,
       cardImage,
     }));
-  }
-
-  private resolveStudentImageUrl(value: string | null): string | null {
-    const trimmedValue = value?.trim();
-
-    if (!trimmedValue) {
-      return null;
-    }
-
-    if (/^https?:\/\//i.test(trimmedValue) || !this.imageBaseUrl) {
-      return trimmedValue;
-    }
-
-    return `${this.imageBaseUrl}/${trimmedValue.replace(/^\/+/, "")}`;
-  }
-
-  private normalizeBaseUrl(value: string): string {
-    return value.trim().replace(/\/+$/, "");
   }
 
   private slugify(value: string): string {
