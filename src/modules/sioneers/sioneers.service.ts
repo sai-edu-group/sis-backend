@@ -31,6 +31,7 @@ export class SioneersService {
         .select([
           "s.id",
           "s.admno as admissionNumber",
+          "s.studname as studentName",
           "s.univname as universityName",
           "s.studprofilepic as profilePicture",
           "s.countryname as countryName",

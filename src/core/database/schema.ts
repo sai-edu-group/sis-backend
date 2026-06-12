@@ -89,6 +89,7 @@ export interface WebGlobalSaioneersTable {
   id: number;
   session_name: string;
   admno: string;
+  studname: string | null;
   univname: string;
   studprofilepic: string | null;
   countryname: string;

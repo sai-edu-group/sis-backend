@@ -1,4 +1,9 @@
-import { Inject, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { Kysely, sql } from "kysely";
 
 import { Tables } from "../../common/enums/database.enum";
@@ -29,8 +34,6 @@ type CareerExamListItem = {
 
 @Injectable()
 export class CareerResultsService {
-  constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
-
   async getCareerResultsList() {
     try {
       const rows = await this.fetchCareerRows();
