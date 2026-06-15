@@ -9,27 +9,17 @@ export class SioneersController {
   constructor(private readonly sioneersService: SioneersService) {}
 
   /**
-   * Fetches sioneers (students) for a given academic year.
+   * Fetches sioneers (students) for a given session name.
    *
-   * @param year - Academic year as a number (e.g., 2024)
-   * @returns List of sioneers for that year
+   * @param session - Session name (e.g. 2025-2026)
+   * @returns List of sioneers for that session
    */
   @Get("get-sioneers")
-  async getSioneers(@Query("year") year: string) {
-    // validate year query parameter
-    if (!year) {
-      throw new BadRequestException("Year query parameter is required");
+  async getSioneers(@Query("session") session?: string) {
+    if (!session?.trim()) {
+      throw new BadRequestException("Query parameter 'session' is required.");
     }
 
-    // Parse year to integer
-    const academicYear = parseInt(year, 10);
-
-    // Check if the parsed year is a valid number
-    if (isNaN(academicYear)) {
-      throw new BadRequestException("Year must be a valid number");
-    }
-
-    // Fetch and return sioneers data for the specified year
-    return this.sioneersService.getSioneersByYear(academicYear);
+    return this.sioneersService.getSioneersBySession(session);
   }
 }
