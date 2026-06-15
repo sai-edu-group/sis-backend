@@ -12,6 +12,7 @@ export class SessionsController {
    * Fetch sessions based on the provided scope. Supported scopes are:
    * - `awards`: Returns sessions that have associated awards.
    * - `career-results`: Returns sessions that have associated career results.
+   * - `global-sioneers`: Returns sessions that have associated Global Sioneers entries.
    * - `results`: Returns sessions that have associated results.
    *
    * If the scope is not provided or is unsupported, a BadRequestException is thrown.

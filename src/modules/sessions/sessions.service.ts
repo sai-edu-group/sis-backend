@@ -19,6 +19,8 @@ export class SessionsService {
         return this.getAwardSessions();
       case "career-results":
         return this.getCareerResultSessions();
+      case "global-sioneers":
+        return this.getGlobalSioneersSessions();
       case "results":
         return this.getResultSessions();
       default:
@@ -97,6 +99,33 @@ export class SessionsService {
           "ms.session_enddate as sessionEndDate",
         ])
         .where("r.status", "=", 1)
+        .where("ms.status", "=", 1)
+        .where("ms.session_name", "is not", null)
+        .distinct()
+        .orderBy("ms.session_enddate", "desc")
+        .execute();
+    } catch (error) {
+      throw new InternalServerErrorException("Unable to fetch sessions");
+    }
+  }
+
+  private async getGlobalSioneersSessions() {
+    try {
+      return await this.db
+        .selectFrom(`${Tables.GLOBAL_SAIONEERS} as s`)
+        .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+          join.on(
+            sql`CAST(s.session_name AS CHAR)`,
+            "=",
+            sql`CAST(ms.id AS CHAR)`,
+          ),
+        )
+        .select([
+          "ms.id as sessionId",
+          "ms.session_name as sessionName",
+          "ms.session_enddate as sessionEndDate",
+        ])
+        .where("s.status", "=", 1)
         .where("ms.status", "=", 1)
         .where("ms.session_name", "is not", null)
         .distinct()

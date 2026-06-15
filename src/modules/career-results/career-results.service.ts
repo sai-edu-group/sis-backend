@@ -34,6 +34,8 @@ type CareerExamListItem = {
 
 @Injectable()
 export class CareerResultsService {
+  constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
+
   async getCareerResultsList() {
     try {
       const rows = await this.fetchCareerRows();

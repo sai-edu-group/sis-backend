@@ -11,13 +11,12 @@ export class SioneersService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
   /**
-   * Fetch sioneers data for a given academic year
+   * Fetch sioneers data for a given session name.
    *
-   * @param year
+   * @param sessionName
    * @throws InternalServerErrorException
    */
-  async getSioneersByYear(year: number) {
-    // Query to the database where display sioneers within the date range also status is active (1)
+  async getSioneersBySession(sessionName: string) {
     try {
       const row = await this.db
         .selectFrom(`${Tables.GLOBAL_SAIONEERS} as s`)
@@ -25,8 +24,8 @@ export class SioneersService {
           join.on(
             sql`CAST(s.session_name AS CHAR)`,
             "=",
-            sql`CAST(ms.id AS CHAR)`
-          )
+            sql`CAST(ms.id AS CHAR)`,
+          ),
         )
         .select([
           "s.id",
@@ -37,7 +36,7 @@ export class SioneersService {
           "s.countryname as countryName",
         ])
         .where("s.status", "=", 1)
-        .where(sql<boolean>`YEAR(ms.session_enddate) = ${year}`)
+        .where("ms.session_name", "=", sessionName.trim())
         .orderBy("s.id")
         .execute();
       return row;
