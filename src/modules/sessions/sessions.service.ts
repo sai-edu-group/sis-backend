@@ -13,31 +13,33 @@ import { Database } from "../../core/database/schema";
 export class SessionsService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
-  async getSessions(scope: string) {
+  async getSessions(scope: string, schoolId: number) {
     switch (scope) {
       case "awards":
-        return this.getAwardSessions();
+        return this.getAwardSessions(schoolId);
       case "career-results":
-        return this.getCareerResultSessions();
+        return this.getCareerResultSessions(schoolId);
       case "global-sioneers":
-        return this.getGlobalSioneersSessions();
+        return this.getGlobalSioneersSessions(schoolId);
       case "results":
-        return this.getResultSessions();
+        return this.getResultSessions(schoolId);
       default:
         throw new BadRequestException(`Unsupported scope '${scope}'.`);
     }
   }
 
-  private async getAwardSessions() {
+  private async getAwardSessions(schoolId: number) {
     try {
       return await this.db
         .selectFrom(`${Tables.AWARDS} as sa`)
         .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-          join.on(
-            sql`CAST(sa.session_name AS CHAR)`,
-            "=",
-            sql`CAST(ms.id AS CHAR)`,
-          ),
+          join
+            .on(
+              sql`CAST(sa.session_name AS CHAR)`,
+              "=",
+              sql`CAST(ms.id AS CHAR)`,
+            )
+            .on("ms.schoolid", "=", String(schoolId)),
         )
         .select([
           "ms.id as sessionId",
@@ -55,16 +57,18 @@ export class SessionsService {
     }
   }
 
-  private async getResultSessions() {
+  private async getResultSessions(schoolId: number) {
     try {
       return await this.db
         .selectFrom(`${Tables.CBSE_RESULTS} as r`)
         .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-          join.on(
-            sql`CAST(r.session_name AS CHAR)`,
-            "=",
-            sql`CAST(ms.id AS CHAR)`,
-          ),
+          join
+            .on(
+              sql`CAST(r.session_name AS CHAR)`,
+              "=",
+              sql`CAST(ms.id AS CHAR)`,
+            )
+            .on("ms.schoolid", "=", String(schoolId)),
         )
         .select([
           "ms.id as sessionId",
@@ -82,16 +86,18 @@ export class SessionsService {
     }
   }
 
-  async getCareerResultSessions() {
+  async getCareerResultSessions(schoolId: number) {
     try {
       return await this.db
         .selectFrom(`${Tables.CAREER_RESULTS} as r`)
         .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-          join.on(
-            sql`CAST(r.session_name AS CHAR)`,
-            "=",
-            sql`CAST(ms.id AS CHAR)`,
-          ),
+          join
+            .on(
+              sql`CAST(r.session_name AS CHAR)`,
+              "=",
+              sql`CAST(ms.id AS CHAR)`,
+            )
+            .on("ms.schoolid", "=", String(schoolId)),
         )
         .select([
           "ms.id as sessionId",
@@ -109,16 +115,18 @@ export class SessionsService {
     }
   }
 
-  private async getGlobalSioneersSessions() {
+  private async getGlobalSioneersSessions(schoolId: number) {
     try {
       return await this.db
         .selectFrom(`${Tables.GLOBAL_SAIONEERS} as s`)
         .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-          join.on(
-            sql`CAST(s.session_name AS CHAR)`,
-            "=",
-            sql`CAST(ms.id AS CHAR)`,
-          ),
+          join
+            .on(
+              sql`CAST(s.session_name AS CHAR)`,
+              "=",
+              sql`CAST(ms.id AS CHAR)`,
+            )
+            .on("ms.schoolid", "=", String(schoolId)),
         )
         .select([
           "ms.id as sessionId",

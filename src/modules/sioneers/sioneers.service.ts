@@ -14,18 +14,21 @@ export class SioneersService {
    * Fetch sioneers data for a given session name.
    *
    * @param sessionName
+   * @param schoolId - School the session belongs to
    * @throws InternalServerErrorException
    */
-  async getSioneersBySession(sessionName: string) {
+  async getSioneersBySession(sessionName: string, schoolId: number) {
     try {
       const row = await this.db
         .selectFrom(`${Tables.GLOBAL_SAIONEERS} as s`)
         .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-          join.on(
-            sql`CAST(s.session_name AS CHAR)`,
-            "=",
-            sql`CAST(ms.id AS CHAR)`,
-          ),
+          join
+            .on(
+              sql`CAST(s.session_name AS CHAR)`,
+              "=",
+              sql`CAST(ms.id AS CHAR)`,
+            )
+            .on("ms.schoolid", "=", String(schoolId)),
         )
         .select([
           "s.id",

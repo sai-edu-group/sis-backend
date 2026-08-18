@@ -19,15 +19,17 @@ export class AwardsService {
    * `year` is kept for backward compatibility while clients switch to
    * consuming `sessionName`.
    */
-  async getLatestAwards() {
+  async getLatestAwards(schoolId: number) {
     return this.db
       .selectFrom(`${Tables.AWARDS} as sa`)
       .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-        join.on(
-          sql`CAST(sa.session_name AS CHAR)`,
-          "=",
-          sql`CAST(ms.id AS CHAR)`,
-        ),
+        join
+          .on(
+            sql`CAST(sa.session_name AS CHAR)`,
+            "=",
+            sql`CAST(ms.id AS CHAR)`,
+          )
+          .on("ms.schoolid", "=", String(schoolId)),
       )
       .select([
         "sa.id",
@@ -49,14 +51,20 @@ export class AwardsService {
    * `year` is kept as a fallback so the existing frontend does not break
    * while the client switches to sending `sessionName`.
    */
-  async getAwards(filters: { sessionName?: string; year?: number }) {
-    const { sessionName, year } = filters;
+  async getAwards(filters: {
+    sessionName?: string;
+    year?: number;
+    schoolId: number;
+  }) {
+    const { sessionName, year, schoolId } = filters;
 
     try {
       let query = this.db
         .selectFrom(`${Tables.AWARDS} as sa`)
         .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-          join.on(sql`CAST(sa.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
+          join
+            .on(sql`CAST(sa.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`)
+            .on("ms.schoolid", "=", String(schoolId)),
         )
         .select([
           "sa.id",

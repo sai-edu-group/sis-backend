@@ -19,11 +19,12 @@ export class ResultsService {
    *
    * @param year - Academic year (e.g., 2025)
    * @param classId - Class identifier (e.g., "7", "10A")
+   * @param schoolId - School the session and class belong to
    * @returns Array of Result records containing studentName, studentProfilePic, percentage, and className.
    *
    * @throws InternalServerErrorException If the year is invalid or the query fails.
    */
-  async getResultsByYearAndClass(year: number, classId: string) {
+  async getResultsByYearAndClass(year: number, classId: string, schoolId: number) {
     if (!Number.isInteger(year)) {
       throw new InternalServerErrorException("Invalid year");
     }
@@ -31,13 +32,19 @@ export class ResultsService {
     try {
       const rows = await this.db
         .selectFrom(`${Tables.CBSE_RESULTS} as r`)
-        .leftJoin(`${Tables.CLASSES} as cl`, "cl.id", "r.class_name")
+        .leftJoin(`${Tables.CLASSES} as cl`, (join) =>
+          join
+            .onRef("cl.id", "=", "r.class_name")
+            .on("cl.schoolid", "=", String(schoolId))
+        )
         .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-          join.on(
-            sql`CAST(r.session_name AS CHAR)`,
-            "=",
-            sql`CAST(ms.id AS CHAR)`
-          )
+          join
+            .on(
+              sql`CAST(r.session_name AS CHAR)`,
+              "=",
+              sql`CAST(ms.id AS CHAR)`
+            )
+            .on("ms.schoolid", "=", String(schoolId))
         )
         .select([
           "r.studname as studentName",

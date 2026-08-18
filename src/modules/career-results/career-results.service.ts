@@ -36,9 +36,9 @@ type CareerExamListItem = {
 export class CareerResultsService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
-  async getCareerResultsList() {
+  async getCareerResultsList(schoolId: number) {
     try {
-      const rows = await this.fetchCareerRows();
+      const rows = await this.fetchCareerRows(schoolId);
       const summaries = this.buildExamSummaries(rows);
 
       return {
@@ -52,9 +52,9 @@ export class CareerResultsService {
     }
   }
 
-  async getCareerResultsDetail(examSlug: string, session: string) {
+  async getCareerResultsDetail(examSlug: string, session: string, schoolId: number) {
     try {
-      const rows = await this.fetchCareerRows();
+      const rows = await this.fetchCareerRows(schoolId);
       const summaries = this.buildExamSummaries(rows);
       const normalizedSlug = this.slugify(examSlug);
       const exam = summaries.find((item) => item.slug === normalizedSlug);
@@ -90,14 +90,18 @@ export class CareerResultsService {
     }
   }
 
-  private async fetchCareerRows(): Promise<CareerResultRow[]> {
+  private async fetchCareerRows(schoolId: number): Promise<CareerResultRow[]> {
     return this.db
       .selectFrom(`${Tables.CAREER_RESULTS} as r`)
       .leftJoin(`${Tables.EXAMS} as ce`, (join) =>
-        join.on(sql`CAST(r.examname AS CHAR)`, "=", sql`CAST(ce.id AS CHAR)`),
+        join
+          .on(sql`CAST(r.examname AS CHAR)`, "=", sql`CAST(ce.id AS CHAR)`)
+          .on("ce.schoolid", "=", schoolId),
       )
       .leftJoin(`${Tables.SESSION} as ms`, (join) =>
-        join.on(sql`CAST(r.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`),
+        join
+          .on(sql`CAST(r.session_name AS CHAR)`, "=", sql`CAST(ms.id AS CHAR)`)
+          .on("ms.schoolid", "=", String(schoolId)),
       )
       .select([
         "r.id as id",
@@ -112,6 +116,9 @@ export class CareerResultsService {
         ),
       ])
       .where("r.status", "=", 1)
+      // `result_career_sis` carries its own school column, so the rows are
+      // filtered directly instead of relying on the left joins above.
+      .where("r.schoolid", "=", String(schoolId))
       .where(
         sql<boolean>`COALESCE(NULLIF(TRIM(ce.career_exam_name), ''), NULLIF(TRIM(r.examname), '')) IS NOT NULL`,
       )
