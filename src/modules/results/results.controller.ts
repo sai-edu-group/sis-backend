@@ -1,6 +1,9 @@
 // MODULES //
 import { ResultsService } from "./results.service";
 
+// UTILS //
+import { resolveSchoolId } from "../../common/utils/school.util";
+
 // OTHERS //
 import { BadRequestException, Controller, Get, Query } from "@nestjs/common";
 
@@ -13,12 +16,17 @@ export class ResultsController {
    * Query Parameters:
      - @param year
     - @param classId
+    - @param schoolId (optional, falls back to the default school)
    
    * Returns an array of result rows for the given year and class.
    * @throws BadRequestException for invalid/missing parameters
    */
   @Get("get-results")
-  async getResults(@Query("year") year: string, @Query("classId") classId: string) {
+  async getResults(
+    @Query("year") year: string,
+    @Query("classId") classId: string,
+    @Query("schoolId") schoolId?: string,
+  ) {
     // Basic presence checks
     if (!year) {
       throw new BadRequestException("Year query parameter is required");
@@ -40,6 +48,10 @@ export class ResultsController {
     }
 
     // Delegate to service
-    return this.resultsService.getResultsByYearAndClass(yearNumber, normalizedClassId);
+    return this.resultsService.getResultsByYearAndClass(
+      yearNumber,
+      normalizedClassId,
+      resolveSchoolId(schoolId),
+    );
   }
 }

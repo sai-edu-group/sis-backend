@@ -15,19 +15,22 @@ export class StudentCouncilService {
   /**
    * Fetches the Student Council entries for a specific academic year.
    * @param academicYear - The academic year as a number (e.g. 2024)
+   * @param schoolId - School the session belongs to
    * @returns Array of student council records
    */
-  async getByYear(academicYear: number) {
+  async getByYear(academicYear: number, schoolId: number) {
     try {
       // Query student council rows for the given academic year
       const rows = await this.db
         .selectFrom(`${Tables.STUDENT_COUNCIL} as sc`)
         .innerJoin(`${Tables.SESSION} as ms`, (join) =>
-          join.on(
-            sql`CAST(sc.session_name AS CHAR)`,
-            "=",
-            sql`CAST(ms.id AS CHAR)`
-          )
+          join
+            .on(
+              sql`CAST(sc.session_name AS CHAR)`,
+              "=",
+              sql`CAST(ms.id AS CHAR)`
+            )
+            .on("ms.schoolid", "=", String(schoolId))
         )
         .select([
           "sc.id",

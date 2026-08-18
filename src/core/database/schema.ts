@@ -157,6 +157,7 @@ export interface MasterSessionTable {
 export interface MasterCareerExamTable {
   id: number;
   career_exam_name: string | null;
+  schoolid: number | null;
   status: number | null;
   entrydate: Date | null;
   updatedate: Date | null;
