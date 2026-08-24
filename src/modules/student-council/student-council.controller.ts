@@ -12,6 +12,17 @@ export class StudentCouncilController {
   constructor(private readonly service: StudentCouncilService) {}
 
   /**
+   * GET All Student Council Data
+   *
+   * Returns every student council row exactly as stored in the database,
+   * with the original column names and no conditions applied.
+   */
+  @Get("all")
+  async getAll() {
+    return this.service.getAll();
+  }
+
+  /**
    * GET Student Council Data
    * @param year - Academic year
    * @param schoolId - Optional school id; falls back to the default school
