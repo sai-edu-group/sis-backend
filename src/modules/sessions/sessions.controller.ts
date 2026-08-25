@@ -15,6 +15,7 @@ export class SessionsController {
    * - `career-results`: Returns sessions that have associated career results.
    * - `global-sioneers`: Returns sessions that have associated Global Sioneers entries.
    * - `results`: Returns sessions that have associated results.
+   * - `student-council`: Returns sessions that have associated student council entries.
    *
    * If the scope is not provided or is unsupported, a BadRequestException is thrown.
    *

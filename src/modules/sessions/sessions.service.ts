@@ -23,6 +23,8 @@ export class SessionsService {
         return this.getGlobalSioneersSessions(schoolId);
       case "results":
         return this.getResultSessions(schoolId);
+      case "student-council":
+        return this.getStudentCouncilSessions(schoolId);
       default:
         throw new BadRequestException(`Unsupported scope '${scope}'.`);
     }
@@ -105,6 +107,35 @@ export class SessionsService {
           "ms.session_enddate as sessionEndDate",
         ])
         .where("r.status", "=", 1)
+        .where("ms.status", "=", 1)
+        .where("ms.session_name", "is not", null)
+        .distinct()
+        .orderBy("ms.session_enddate", "desc")
+        .execute();
+    } catch (error) {
+      throw new InternalServerErrorException("Unable to fetch sessions");
+    }
+  }
+
+  private async getStudentCouncilSessions(schoolId: number) {
+    try {
+      return await this.db
+        .selectFrom(`${Tables.STUDENT_COUNCIL} as sc`)
+        .innerJoin(`${Tables.SESSION} as ms`, (join) =>
+          join
+            .on(
+              sql`CAST(sc.session_name AS CHAR)`,
+              "=",
+              sql`CAST(ms.id AS CHAR)`,
+            )
+            .on("ms.schoolid", "=", String(schoolId)),
+        )
+        .select([
+          "ms.id as sessionId",
+          "ms.session_name as sessionName",
+          "ms.session_enddate as sessionEndDate",
+        ])
+        .where("sc.status", "=", 1)
         .where("ms.status", "=", 1)
         .where("ms.session_name", "is not", null)
         .distinct()

@@ -1757,7 +1757,7 @@ Request Parameters:
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `scope` | `string` | Yes | Supported values: `awards`, `career-results`, `results` |
+| `scope` | `string` | Yes | Supported values: `awards`, `career-results`, `global-sioneers`, `results`, `student-council` |
 | `schoolId` | `number` | No | School to scope master-table lookups to. Defaults to `DEFAULT_SCHOOL_ID` (`2`). |
 
 Request Body:
