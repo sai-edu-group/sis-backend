@@ -1936,11 +1936,74 @@ Dependencies:
 
 ---
 
+### Endpoint: `GET /student-council/by-session`
+
+Method: `GET`
+
+Purpose: fetch student council entries for a given academic session.
+
+Authentication: Not required
+
+Permissions: Public
+
+Request Parameters:
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `session` | `string` | Yes | Session name matched against `master_session.session_name` (e.g. `2025-2026`) |
+| `schoolId` | `number` | No | School to scope master-table lookups to. Defaults to `DEFAULT_SCHOOL_ID` (`2`). |
+
+Request Body:
+
+```json
+{}
+```
+
+Validation Rules:
+
+- `session` must be present and non-empty
+
+Execution Flow:
+
+1. Route: `GET /student-council/by-session?session=2025-2026`
+2. Controller: `StudentCouncilController.getBySession()`
+3. Service: `StudentCouncilService.getBySession(sessionName, schoolId)`
+4. Data layer: Kysely query with cast join
+5. Database query:
+   - `web_sis_scouncil as sc`
+   - inner join `master_session as ms`
+   - filter `sc.status = 1`
+   - filter `ms.session_name = :sessionName`
+   - order by `sc.sorting`
+
+Data Sources:
+
+| Source | Type | Purpose |
+| --- | --- | --- |
+| `web_sis_scouncil` | Database | Student council content |
+| `master_session` | Database | Session filtering |
+
+Database Tables Accessed:
+
+- `web_sis_scouncil`
+- `master_session`
+
+Queries Performed:
+
+- Fetch ordered active student council rows for one academic session
+
+Business Logic:
+
+- Returns selected fields only
+- Wraps DB errors in an `InternalServerErrorException`
+
+---
+
 ### Endpoint: `GET /student-council/by-year`
 
 Method: `GET`
 
-Purpose: fetch student council entries for a given academic year.
+Purpose: fetch student council entries for a given calendar year. Retained for backwards compatibility; new clients should use `by-session`.
 
 Authentication: Not required
 
@@ -1953,12 +2016,6 @@ Request Parameters:
 | `year` | `number` | Yes | Calendar year matched against `master_session.session_enddate` |
 | `schoolId` | `number` | No | School to scope master-table lookups to. Defaults to `DEFAULT_SCHOOL_ID` (`2`). |
 
-Request Body:
-
-```json
-{}
-```
-
 Validation Rules:
 
 - `year` must be present
@@ -1968,35 +2025,12 @@ Execution Flow:
 
 1. Route: `GET /student-council/by-year?year=2025`
 2. Controller: `StudentCouncilController.getByYear()`
-3. Service: `StudentCouncilService.getByYear(academicYear)`
-4. Data layer: Kysely query with cast join
-5. Database query:
-   - `web_sis_scouncil as sc`
-   - inner join `master_session as ms`
-   - filter `sc.status = 1`
-   - filter `YEAR(ms.session_enddate) = :academicYear`
-   - order by `sc.sorting`
+3. Service: `StudentCouncilService.getByYear(academicYear, schoolId)`
+4. Database query identical to `by-session`, except the filter is `YEAR(ms.session_enddate) = :academicYear`
 
-Data Sources:
+Caveat:
 
-| Source | Type | Purpose |
-| --- | --- | --- |
-| `web_sis_scouncil` | Database | Student council content |
-| `master_session` | Database | Year filtering |
-
-Database Tables Accessed:
-
-- `web_sis_scouncil`
-- `master_session`
-
-Queries Performed:
-
-- Fetch ordered active student council rows for one academic year
-
-Business Logic:
-
-- Returns selected fields only
-- Wraps DB errors in an `InternalServerErrorException`
+- Two sessions can share an end year, so a year can match rows from more than one session. `by-session` does not have this ambiguity.
 
 Response:
 
@@ -2372,7 +2406,7 @@ flowchart TD
   Results["GET /results/get-results"] --> ResultsController --> ResultsService --> ResultsTables["result_cbse_sis + master_class + master_session"]
   Sessions["GET /sessions"] --> SessionsController --> SessionsService --> SessionTables["scope-dependent table + master_session"]
   Sioneers["GET /sioneers/get-sioneers"] --> SioneersController --> SioneersService --> SioneersTables["web_global_saioneers + master_session"]
-  Council["GET /student-council/by-year"] --> StudentCouncilController --> StudentCouncilService --> CouncilTables["web_sis_scouncil + master_session"]
+  Council["GET /student-council/by-session | by-year"] --> StudentCouncilController --> StudentCouncilService --> CouncilTables["web_sis_scouncil + master_session"]
 ```
 ## 7. Live API Samples
 
@@ -2884,12 +2918,12 @@ Live response excerpt:
 
 Important note: live data shows that numeric `classId` values are internal identifiers, not direct human-readable class labels. For example, `classId=7` currently resolves to `className="Class X"`.
 
-### `GET /student-council/by-year?year=2026`
+### `GET /student-council/by-session?session=2025-2026`
 
 Request:
 
 ```http
-GET /student-council/by-year?year=2026
+GET /student-council/by-session?session=2025-2026
 ```
 
 Live response excerpt:
