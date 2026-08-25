@@ -30,6 +30,20 @@ export class SessionsService {
     }
   }
 
+  /**
+   * Fetches every row from the session master table as-is, with no filters
+   * applied (no status, school or content-type conditions).
+   *
+   * @returns Array of raw session records
+   */
+  async getAllSessions() {
+    try {
+      return await this.db.selectFrom(Tables.SESSION).selectAll().execute();
+    } catch (error) {
+      throw new InternalServerErrorException("Unable to fetch sessions");
+    }
+  }
+
   private async getAwardSessions(schoolId: number) {
     try {
       return await this.db

@@ -13,6 +13,30 @@ export class StudentCouncilService {
   constructor(@Inject("DB") private readonly db: Kysely<Database>) {}
 
   /**
+   * Fetches every Student Council row as-is, with no filters applied and the
+   * original database column names preserved.
+   *
+   * @returns Array of raw student council records
+   */
+  async getAll() {
+    try {
+      // Select every column of every row, without any conditions
+      const rows = await this.db
+        .selectFrom(Tables.STUDENT_COUNCIL)
+        .selectAll()
+        .execute();
+
+      return rows;
+    } catch (error) {
+      // Wrap database failures in an Internal Server Error response
+      throw new InternalServerErrorException({
+        message: "Unable to fetch student council data",
+        detail: error?.message ?? String(error),
+      });
+    }
+  }
+
+  /**
    * Fetches the Student Council entries for a specific academic session.
    * @param sessionName - The session name (e.g. 2025-2026)
    * @param schoolId - School the session belongs to
@@ -54,6 +78,7 @@ export class StudentCouncilService {
       });
     }
   }
+
   /**
    * Fetches the Student Council entries for a specific academic year.
    *

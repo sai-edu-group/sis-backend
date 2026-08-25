@@ -21,6 +21,17 @@ export class SessionsController {
    *
    * `schoolId` is optional and falls back to the default school.
    */
+  /**
+   * GET: /sessions/all
+   *
+   * Fetch every session from the master table exactly as stored, with no
+   * conditions applied - no scope, school or status filtering.
+   */
+  @Get("all")
+  getAllSessions() {
+    return this.sessionsService.getAllSessions();
+  }
+
   @Get()
   getSessions(
     @Query("scope") scope?: string,
