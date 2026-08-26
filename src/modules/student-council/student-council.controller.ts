@@ -24,6 +24,30 @@ export class StudentCouncilController {
 
   /**
    * GET Student Council Data
+   * @param session - Session name (e.g. 2025-2026)
+   * @param schoolId - Optional school id; falls back to the default school
+   * @returns Student Council entries for the provided session
+   */
+  @Get("by-session")
+  async getBySession(
+    @Query("session") session?: string,
+    @Query("schoolId") schoolId?: string,
+  ) {
+    //  validate session presence
+    if (!session?.trim()) {
+      throw new BadRequestException("Query parameter 'session' is required.");
+    }
+
+    // fetch and return data
+    return this.service.getBySession(session, resolveSchoolId(schoolId));
+  }
+
+  /**
+   * GET Student Council Data by calendar year.
+   *
+   * Kept for backwards compatibility with clients that predate `by-session`.
+   * New clients should use `by-session`.
+   *
    * @param year - Academic year
    * @param schoolId - Optional school id; falls back to the default school
    * @returns Student Council entries for the provided year
